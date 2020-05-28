@@ -26,7 +26,7 @@
 
         </LinearLayout>
         <LinearLayout
-            android:layout_width="250dp"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <LinearLayout
@@ -113,11 +113,20 @@
 
             <Button
                 android:layout_height="35dp"
-                android:layout_width="80dp"
+                android:layout_width="95dp"
                 android:id="@+id/usunDevice"
                 android:background="@drawable/button_gradient2_red"
                 android:textColor="@color/colorWhite"
                 android:text="Usuń"/>
+
+            <Button
+                android:layout_height="35dp"
+                android:layout_marginTop="5dp"
+                android:layout_width="95dp"
+                android:id="@+id/confWIF"
+                android:background="@drawable/button_gradient2_yellow"
+                android:textColor="@color/colorBlack"
+                android:text="Ustaw WIFI"/>
         </LinearLayout>
     </LinearLayout>
 

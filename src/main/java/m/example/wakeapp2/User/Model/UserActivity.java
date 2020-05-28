@@ -45,7 +45,6 @@ public class UserActivity extends AppCompatActivity {
         sharedpreferences = getSharedPreferences("MyPref", 0);
         type="getUsers";
         if (sharedpreferences.contains(Name)) {
-
             GroupId = sharedpreferences.getString(Group_sp, "");
         }
 
@@ -54,13 +53,11 @@ public class UserActivity extends AppCompatActivity {
             JSONObject obj = new JSONObject(s.substring(s.indexOf("{"), s.lastIndexOf("}") + 1));
             JSONArray array = obj.getJSONArray("users");
             for (int i=0; i <array.length(); i++){
-
                 JSONObject alarm = array.getJSONObject(i);
                 ListUser p = new ListUser(
                         alarm.getString("UserId"),alarm.getString("Name"),alarm.getString("Email"),alarm.getString("UserRole"),alarm.getString("Create_on")
                 );
                 userList.add(p);
-
             }
 
             ListUserAdapter adapter = new ListUserAdapter(userList, UserActivity.this);

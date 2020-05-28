@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -121,6 +122,8 @@ public class AddDiviceFragment extends Fragment  implements DeviceScanerMAC.OnFr
 
             ArrayAdapter arrayAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1,userList);
             listUser.setAdapter(arrayAdapter);
+
+
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -128,8 +131,6 @@ public class AddDiviceFragment extends Fragment  implements DeviceScanerMAC.OnFr
         } catch (JSONException e)  {
 
         }
-
-
 
 
 
@@ -181,12 +182,13 @@ public class AddDiviceFragment extends Fragment  implements DeviceScanerMAC.OnFr
             }
         });
 
-
         btn_cofnij.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendBack();
-                getActivity().getSupportFragmentManager().popBackStack();
+                getActivity().finish();
+                startActivity(getActivity().getIntent());
+
+
             }
         });
 
@@ -209,6 +211,7 @@ public class AddDiviceFragment extends Fragment  implements DeviceScanerMAC.OnFr
                 String dGroupId = sharedpreferences.getString(Group_sp, "");
                 Log.e("dddd", dName + dType +  dMac + dUser + dGroupId);
                 backgroundTask.execute("addDevice", dName,dType, dMac, dUser, dGroupId );
+
             }
         });
 

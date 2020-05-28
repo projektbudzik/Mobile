@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -26,7 +27,7 @@ import m.example.wakeapp2.R;
 import m.example.wakeapp2.User.Model.ListUser;
 import m.example.wakeapp2.User.Model.ListUserAdapter;
 
-public class DeviceActivity extends AppCompatActivity  implements AddDiviceFragment.OnFragmentInteractionListener {
+public class DeviceActivity extends AppCompatActivity  implements AddDiviceFragment.OnFragmentInteractionListener, DeviceWifi.OnFragmentInteractionListener {
     ListView listview;
     List<ListDevice> deviceList;
     String type, GroupId, Email, Role;
@@ -36,7 +37,6 @@ public class DeviceActivity extends AppCompatActivity  implements AddDiviceFragm
     public static final String Email_sp = "emailKey";
     public static final String Role_sp = "roleKey";
     public static final String Group_sp = "groupKey";
-
 
 
     @Override
@@ -62,13 +62,11 @@ public class DeviceActivity extends AppCompatActivity  implements AddDiviceFragm
             JSONArray array = obj.getJSONArray("devices");
             Log.e("Array:", array.length() +"");
             for (int i=0; i <array.length(); i++){
-
                 JSONObject device = array.getJSONObject(i);
                 ListDevice p = new ListDevice(
                         device.getString("DeviceId"),device.getString("Name"),device.getString("DeviceType"),device.getString("Mac"),device.getString("NameUser")
                 );
                 deviceList.add(p);
-
             }
             ListDeviceAdapter adapter = new ListDeviceAdapter(deviceList, DeviceActivity.this);
             listview.setAdapter(adapter);
@@ -107,6 +105,11 @@ public class DeviceActivity extends AppCompatActivity  implements AddDiviceFragm
 
     @Override
     public void onFragmentInteraction() {
+
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
 
     }
 }

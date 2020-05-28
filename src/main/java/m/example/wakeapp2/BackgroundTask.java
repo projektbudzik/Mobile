@@ -44,6 +44,7 @@ public class BackgroundTask extends AsyncTask<String, String, String> {
         String userURL = "http://www.projektbudzik.pl/php/phplistuser.php";
         String changeRole = "http://www.projektbudzik.pl/php/phpchangerole.php";
         String addDevice = "http://www.projektbudzik.pl/php/phpadddevice.php";
+        String removeDevice = "http://www.projektbudzik.pl/php/phpremovedevice.php";
 
         if(type.equals("userreg")){
             String username = strings[1];
@@ -430,6 +431,41 @@ public class BackgroundTask extends AsyncTask<String, String, String> {
                             URLEncoder.encode("dMAC","UTF-8")+"="+URLEncoder.encode(dMAC,"UTF-8")+"&"+
                             URLEncoder.encode("dUser","UTF-8")+"="+URLEncoder.encode(dUser,"UTF-8")+"&"+
                             URLEncoder.encode("dGroupId","UTF-8")+"="+URLEncoder.encode(dGroupId,"UTF-8");
+                    bufferedWriter.write(data);
+                    bufferedWriter.flush();
+                    bufferedWriter.close();
+                    outputStream.close();
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    BufferedReader bufferedReader = new BufferedReader (new InputStreamReader(inputStream,"iso-8859-1"));
+                    String response = "" ;
+                    String line;
+                    while ((line = bufferedReader.readLine())!=null)
+                    {
+                        response+= line;
+                    }
+                    bufferedReader.close();
+                    inputStream.close();
+                    httpURLConnection.disconnect();
+                    return response;
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+            }catch (MalformedURLException e){
+                e.printStackTrace();
+            }
+        }
+        else if(type.equals("removeDevice"))        {
+            String dId = strings[1];
+            try {
+                URL url = new URL(removeDevice);
+                try{
+                    HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
+                    httpURLConnection.setRequestMethod("POST");
+                    httpURLConnection.setDoOutput(true);
+                    httpURLConnection.setDoInput(true);
+                    OutputStream outputStream = httpURLConnection.getOutputStream();
+                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream,"UTF-8"));
+                    String data = URLEncoder.encode("dId","UTF-8")+"="+URLEncoder.encode(dId,"UTF-8");
                     bufferedWriter.write(data);
                     bufferedWriter.flush();
                     bufferedWriter.close();

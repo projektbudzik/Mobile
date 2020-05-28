@@ -46,7 +46,7 @@ public class DeviceScanerMAC extends Fragment {
 
     private SurfaceView surfaceView;
     private TextView camSerialNum, MACadres;
-    private Button btn_cofnij;
+    private Button btn_cofnij2;
     private BarcodeDetector barcodeDetector;
     private CameraSource cameraSource;
 
@@ -85,10 +85,11 @@ public class DeviceScanerMAC extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_device_scaner_mac, container, false);
 
 
-        btn_cofnij = view.findViewById(R.id.btn_cofnij);
+        btn_cofnij2 = view.findViewById(R.id.btn_cofnij2);
         surfaceView = view.findViewById(R.id.camerapreview);
         camSerialNum = view.findViewById(R.id.cam_serialnum);
         MACadres =view.findViewById(R.id.MACadres);
+
         barcodeDetector = new BarcodeDetector.Builder(getContext())
                 .setBarcodeFormats(Barcode.QR_CODE)
                 .build();
@@ -139,11 +140,12 @@ public class DeviceScanerMAC extends Fragment {
 
                             SharedPreferences sharedpreferences = getContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
                             SharedPreferences.Editor editor = sharedpreferences.edit();
-                            editor.putString(adrMAC, qrCodes.valueAt(0).displayValue);
+                            String Mac = (qrCodes.valueAt(0).displayValue).substring(0,17);
+                            editor.putString(adrMAC, Mac);
                             editor.commit();
                             sendBack();
                             cameraSource.stop();
-                            MACadres.setText(qrCodes.valueAt(0).displayValue);
+                            MACadres.setText(Mac);
                             Toast.makeText(getContext(), "Zeskanowano", Toast.LENGTH_LONG).show();
                         }
 
@@ -152,10 +154,10 @@ public class DeviceScanerMAC extends Fragment {
             }
         });
 
-        btn_cofnij.setOnClickListener(new View.OnClickListener() {
+        btn_cofnij2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendBack();
+                getActivity().getSupportFragmentManager().popBackStack();
 
             }
         });
@@ -167,7 +169,7 @@ public class DeviceScanerMAC extends Fragment {
     public void sendBack() {
         if (mListener != null) {
             mListener.onFragmentInteraction();
-            getActivity().getSupportFragmentManager().popBackStack();
+
         }
     }
 

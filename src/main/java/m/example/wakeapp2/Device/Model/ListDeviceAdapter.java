@@ -1,5 +1,6 @@
 package m.example.wakeapp2.Device.Model;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,6 +12,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import java.util.List;
 
 import m.example.wakeapp2.BackgroundTask;
@@ -23,12 +28,14 @@ public class ListDeviceAdapter extends ArrayAdapter<ListDevice> {
     SharedPreferences sharedpreferences;
     public static final String Rolesh = "roleKey";
     public static final String phoneNumber = "numberKey";
-
+    private Button confWIF, usunDevice;
     public ListDeviceAdapter(List<ListDevice> P, Context C){
         super (C, R.layout.listdevice, P);
         this.SqlList = P;
         this.mCtx = C;
     }
+
+
 
     @NonNull
     @Override
@@ -41,22 +48,23 @@ public class ListDeviceAdapter extends ArrayAdapter<ListDevice> {
         TextView deviceTypes = view.findViewById(R.id.tvDeviceType);
         TextView deviceMAC = view.findViewById(R.id.tvMac);
         TextView deviceUser = view.findViewById(R.id.tvOwner);
+        final ListDevice listDevice = SqlList.get(position);
+
         sharedpreferences = mCtx.getSharedPreferences("MyPref", 0);
         String myRole = sharedpreferences.getString(Rolesh, "");
         String myNumer = sharedpreferences.getString(phoneNumber, "");
-        final ListDevice listDevice = SqlList.get(position);
-        Button usunDevice = view.findViewById(R.id.usunDevice);
+
+        usunDevice = view.findViewById(R.id.usunDevice);
         deviceName.setText(listDevice.getName());
         id.setText(listDevice.getDeviceId());
-
         deviceTypes.setText(listDevice.getDeviceType());
-
         deviceMAC.setText(listDevice.getMAC());
         deviceUser.setText(listDevice.getUserName());
-
-         if(listDevice.getMAC().equals(myNumer) || myRole.equals("User")){
-            usunDevice.setVisibility(View.GONE);
+        confWIF = view.findViewById(R.id.confWIF);
+        if(listDevice.getDeviceType().equals("telefon")){
+            confWIF.setVisibility(View.GONE);
         }
+
 
         usunDevice.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,17 +76,13 @@ public class ListDeviceAdapter extends ArrayAdapter<ListDevice> {
                         .setPositiveButton("Tak", new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int whichButton) {
-//                                String email = listDevice.getMAC();
-//                                String nowaRola;
-//                                if (listDevice.getUserRole().equals("User")){
-//                                    nowaRola = "SuperUser";
-//                                }else{
-//                                    nowaRola = "User";
-//                                }
-//                                String type = "changeRole";
-//                                BackgroundTask backgroundTask = new BackgroundTask(mCtx);
-//                                backgroundTask.execute(type, email, nowaRola);
+                                String dId = listDevice.getDeviceId();
+                                String type = "removeDevice";
+                                BackgroundTask backgroundTask = new BackgroundTask(mCtx);
+                                backgroundTask.execute(type, dId);
                                 dialog.dismiss();
+                                ((Activity)mCtx).finish();
+                                mCtx.startActivity( ((Activity)mCtx).getIntent());
                             }})
                         .setNegativeButton("Nie", new DialogInterface.OnClickListener() {
                             @Override
@@ -87,12 +91,19 @@ public class ListDeviceAdapter extends ArrayAdapter<ListDevice> {
                             }})
                         .create()
                         .show();
-
-
             }
         });
 
-
+        confWIF.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DeviceWifi fragment = DeviceWifi.newInstance();
+                FragmentTransaction transaction = ((DeviceActivity)mCtx).getSupportFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(R.anim.exit_from_right, R.anim.exit_to_right, R.anim.exit_from_right, R.anim.exit_to_right);
+                transaction.addToBackStack(null);
+                transaction.add(R.id.fragment_container_device, fragment, "BLANK_FRAGMENT").commit();
+            }
+        });
 
 
         return view;
