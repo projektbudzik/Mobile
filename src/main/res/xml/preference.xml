@@ -1,0 +1,12 @@
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="first_preferencescreen">
+
+    <PreferenceCategory android:title="Ustawienia gry">
+
+    </PreferenceCategory>
+    <Preference
+        android:key="Info"
+        android:title="Autor: @S15585"
+        />
+</PreferenceScreen>
