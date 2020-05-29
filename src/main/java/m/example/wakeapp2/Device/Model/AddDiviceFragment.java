@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -93,12 +94,12 @@ public class AddDiviceFragment extends Fragment  implements DeviceScanerMAC.OnFr
         radioDevice = view.findViewById(R.id.radioDevice);
         et_deviceMAC = view.findViewById(R.id.et_deviceMAC);
         deviceMAC = view.findViewById(R.id.deviceMAC);
-        et_deviceUser = view.findViewById(R.id.et_deviceUser);
         deviceUser= view.findViewById(R.id.deviceUser);
         radioTelefon = view.findViewById(R.id.radioTelefon);
         btn_cofnij = view.findViewById(R.id.btn_cofnij);
         listUser =view.findViewById(R.id.listUser);
         userList = new ArrayList<>();
+
         btn_dodaj_device = view.findViewById(R.id.btn_dodaj_device);
         BackgroundTask backgroundTask = new BackgroundTask(getContext());
         SharedPreferences sharedpreferences = getActivity().getSharedPreferences("MyPref", 0);
@@ -123,6 +124,23 @@ public class AddDiviceFragment extends Fragment  implements DeviceScanerMAC.OnFr
             ArrayAdapter arrayAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1,userList);
             listUser.setAdapter(arrayAdapter);
 
+            et_deviceName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (!hasFocus) {
+                        hideKeyboard(v);
+                    }
+                }
+            });
+
+            et_deviceMAC.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (!hasFocus) {
+                        hideKeyboard(v);
+                    }
+                }
+            });
 
         } catch (ExecutionException e) {
             e.printStackTrace();
@@ -155,11 +173,13 @@ public class AddDiviceFragment extends Fragment  implements DeviceScanerMAC.OnFr
                 if (!radioTelefon.isChecked()){
                     deviceMAC.setText("Adres MAC");
                     et_deviceMAC.setHint("Kliknij aby zeskanować");
+                    et_deviceMAC.setFocusable(false);
 
                 } else {
                     deviceMAC.setText("Numet telefonu");
                     et_deviceMAC.setHint("Numet telefonu");
-
+                    et_deviceMAC.setFocusableInTouchMode(true);
+                    et_deviceMAC.setFocusable(true);
 
                 }
             }
@@ -177,6 +197,7 @@ public class AddDiviceFragment extends Fragment  implements DeviceScanerMAC.OnFr
                     transaction.setCustomAnimations(R.anim.exit_from_right, R.anim.exit_to_right, R.anim.exit_from_right, R.anim.exit_to_right);
                     transaction.addToBackStack(null);
                     transaction.add(R.id.fragment_container_deviceMAC, fragment, "BLANK_FRAGMENT").commit();
+                    hideKeyboard(v);
 
                 }
             }
@@ -223,7 +244,10 @@ public class AddDiviceFragment extends Fragment  implements DeviceScanerMAC.OnFr
             mListener.onFragmentInteraction();
         }
     }
-
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager =(InputMethodManager)getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
 
     @Override
     public void onAttach(Context context) {

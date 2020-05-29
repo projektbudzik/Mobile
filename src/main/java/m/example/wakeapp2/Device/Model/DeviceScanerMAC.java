@@ -19,6 +19,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -97,6 +98,10 @@ public class DeviceScanerMAC extends Fragment {
                 .setRequestedPreviewSize(640,480)
                 .build();
 
+
+        InputMethodManager inputMethodManager =(InputMethodManager)getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
         surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
@@ -153,6 +158,11 @@ public class DeviceScanerMAC extends Fragment {
                 }
             }
         });
+
+
+
+
+
 
         btn_cofnij2.setOnClickListener(new View.OnClickListener() {
             @Override

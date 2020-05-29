@@ -6,13 +6,14 @@
     android:layout_height="match_parent"
     android:padding="10dp">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:id="@+id/Logo_dev">
 
             <TextView
                 android:drawableTop="@drawable/ic_dashboard_black_24dp"
@@ -26,9 +27,10 @@
 
         </LinearLayout>
         <LinearLayout
-            android:layout_width="230dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_toRightOf="@id/Logo_dev">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -50,7 +52,7 @@
 
             </LinearLayout>
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
                 <TextView
@@ -68,7 +70,7 @@
                     android:text="Telefon"/>
             </LinearLayout>
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
                 <TextView
@@ -86,7 +88,7 @@
                     android:text="+48606598741"/>
             </LinearLayout>
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
                 <TextView
@@ -109,7 +111,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_alignParentRight="true">
 
             <Button
                 android:layout_height="35dp"
@@ -128,6 +131,6 @@
                 android:textColor="@color/colorBlack"
                 android:text="Ustaw WIFI"/>
         </LinearLayout>
-    </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>

@@ -15,6 +15,7 @@ import java.util.Calendar;
 import m.example.wakeapp2.Alarm.Model.AlarmActivity;
 import m.example.wakeapp2.Device.Model.DeviceActivity;
 import m.example.wakeapp2.User.Model.UserActivity;
+import m.example.wakeapp2.group_log_reg.LoginActivity;
 import m.example.wakeapp2.user_log_reg.Login2Activity;
 
 public class MainActivity extends AppCompatActivity {

@@ -33,7 +33,7 @@
         android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="48dp"
+        android:layout_margin="8dp"
         android:src="@drawable/ic_camera_alt_white_48dp"/>
 
     <SurfaceView
@@ -70,7 +70,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:textSize="40sp"
+        android:textSize="32sp"
         android:layout_marginStart="25dp"
         android:layout_marginBottom="10dp"
         android:layout_below="@id/cam_serialnum"

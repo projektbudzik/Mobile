@@ -37,7 +37,7 @@
                 android:textColor="@color/colorBlack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Data wywołania:"/>
+                android:text="Data alarmu:"/>
 
             <TextView
                 android:layout_marginLeft="10dp"
@@ -57,7 +57,7 @@
 
         </LinearLayout>
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <TextView
@@ -75,7 +75,7 @@
                 android:text="07:30"/>
         </LinearLayout>
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <TextView
@@ -93,7 +93,7 @@
                 android:text="Pon, Wt, Czw"/>
         </LinearLayout>
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <TextView
@@ -112,7 +112,7 @@
 
         </LinearLayout>
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <TextView

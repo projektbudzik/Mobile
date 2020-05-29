@@ -57,13 +57,13 @@ public class Login2Activity extends AppCompatActivity {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         } else {
-
+            if (sharedPreferences.contains(Name)){
             finish();
             Intent intent = new Intent(this, LoginActivity.class);
             intent.putExtra("EMAIL", sharedPreferences.getString(Email, ""));
             startActivity(intent);
+         }
         }
-
         if (  ActivityCompat.checkSelfPermission(this, READ_PHONE_STATE) ==
                         PackageManager.PERMISSION_GRANTED ) {
             TelephonyManager tMgr = (TelephonyManager)   this.getSystemService(Context.TELEPHONY_SERVICE);

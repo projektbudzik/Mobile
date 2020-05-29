@@ -23,8 +23,8 @@
         android:layout_height="wrap_content"
         android:text="@string/user_lvl"
         android:textSize="50sp"
-        android:layout_marginStart="25dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginBottom="0dp"
         android:textColor="@color/colorWhite"
         android:drawableStart="@drawable/ic_person_white_24dp"/>
     <LinearLayout
@@ -55,7 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="5dp"
                 android:text="@string/user_tag"
                 android:textColor="@color/colorWhite"
                 android:textSize="17sp" />
