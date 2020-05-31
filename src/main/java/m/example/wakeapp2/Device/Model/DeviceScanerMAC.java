@@ -144,10 +144,12 @@ public class DeviceScanerMAC extends Fragment {
 
 
                             SharedPreferences sharedpreferences = getContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+
                             SharedPreferences.Editor editor = sharedpreferences.edit();
                             String Mac = (qrCodes.valueAt(0).displayValue).substring(0,17);
                             editor.putString(adrMAC, Mac);
                             editor.commit();
+
                             sendBack();
                             cameraSource.stop();
                             MACadres.setText(Mac);

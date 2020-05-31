@@ -18,7 +18,7 @@
     <string name="groupName">Nazwa grupy</string>
     <string name="deviceName">Nazwa urzadzenia</string>
     <string name="wifiName">Nazwa sieci (SSID)</string>
-    <string name="QRScan">Zeskanuj kod QR</string>
+    <string name="QRScan">Twoj telefon</string>
     <string name="Off">Wyłącz</string>
     <string name="Alarm_on">Alarm uruchomiony</string>
 
@@ -55,7 +55,7 @@
     <string-array name="fragment_2_3_2">
         <item>Dołącz do nas</item>
         <item>Zaloguj się</item>
-        <item>lub zarejestruj</item>
+        <item>lub załóż nowe konto</item>
     </string-array>
 
     <!-- TODO: USER REGISTRATION -->

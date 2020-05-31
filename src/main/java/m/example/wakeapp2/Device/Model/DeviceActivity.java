@@ -28,16 +28,17 @@ import m.example.wakeapp2.User.Model.ListUser;
 import m.example.wakeapp2.User.Model.ListUserAdapter;
 
 public class DeviceActivity extends AppCompatActivity  implements AddDiviceFragment.OnFragmentInteractionListener, DeviceWifi.OnFragmentInteractionListener {
+
     ListView listview;
     List<ListDevice> deviceList;
     String type, GroupId, Email, Role;
     SharedPreferences sharedpreferences;
     Button btn_back, btn_add_new_device;
+
     public static final String Name = "nameKey";
     public static final String Email_sp = "emailKey";
     public static final String Role_sp = "roleKey";
     public static final String Group_sp = "groupKey";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +61,6 @@ public class DeviceActivity extends AppCompatActivity  implements AddDiviceFragm
             String s = backgroundTask.execute(type, Role, Email, GroupId).get();
             JSONObject obj = new JSONObject(s.substring(s.indexOf("{"), s.lastIndexOf("}") + 1));
             JSONArray array = obj.getJSONArray("devices");
-            Log.e("Array:", array.length() +"");
             for (int i=0; i <array.length(); i++){
                 JSONObject device = array.getJSONObject(i);
                 ListDevice p = new ListDevice(

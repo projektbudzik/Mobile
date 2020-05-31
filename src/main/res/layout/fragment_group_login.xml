@@ -4,7 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".group_log_reg.groupLoginFragment"
-    android:background="@drawable/bakground_gradient">
+    android:background="@drawable/bakground_gradient"
+    android:clickable="true"
+    android:focusableInTouchMode="true">
     <ImageView
         android:contentDescription="@string/image"
         android:id="@+id/Logo"

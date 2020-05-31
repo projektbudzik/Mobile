@@ -3,6 +3,7 @@ package m.example.wakeapp2.info_log_reg;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,13 +13,16 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.os.Vibrator;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.gms.vision.CameraSource;
@@ -28,116 +32,80 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
 
+import m.example.wakeapp2.BackgroundTask;
 import m.example.wakeapp2.MainActivity;
 import m.example.wakeapp2.R;
 import m.example.wakeapp2.WifiDeviceActivity;
 
 public class infoContextFragment extends Fragment {
 
-    SurfaceView surfaceView;
-    TextView camSerialNum;
-    BarcodeDetector barcodeDetector;
-    CameraSource cameraSource;
-    Button btn_accept, btn_skip;
-
+    private EditText et_mobile_num, et_mobile_name;
+    private static final String phoneNumber = "numberKey";
+    public static final String Name = "nameKey";
+    public static final String Email = "emailKey";
+    public static final String Group = "groupKey";
+    private SharedPreferences sharedpreferences;
+    private Button btn_skip, btn_add_phone;
 
     public infoContextFragment() {
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-    View view = inflater.inflate(R.layout.fragment_info_context, container, false);
-    btn_accept = view.findViewById(R.id.btn_start_info);
-    btn_skip = view.findViewById(R.id.btn_start_info);
-    surfaceView = view.findViewById(R.id.camerapreview);
-    camSerialNum = view.findViewById(R.id.cam_serialnum);
-
-    barcodeDetector = new BarcodeDetector.Builder(getContext())
-            .setBarcodeFormats(Barcode.QR_CODE)
-            .build();
-    cameraSource = new CameraSource.Builder(getContext(),barcodeDetector)
-            .setRequestedPreviewSize(640,480)
-            .build();
-
-    surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
-        @Override
-        public void surfaceCreated(SurfaceHolder holder) {
-            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-                return;
-            }
-            try {
-                cameraSource.start(holder);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
+                             final Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_info_context, container, false);
+        et_mobile_num = view.findViewById(R.id.et_mobile_num);
+        et_mobile_name = view.findViewById(R.id.et_mobile_name);
+        sharedpreferences = getActivity().getSharedPreferences("MyPref", 0);
+        btn_skip = view.findViewById(R.id.btn_skip);
+        btn_add_phone = view.findViewById(R.id.btn_add_phone);
+        String tel = sharedpreferences.getString(phoneNumber, "");
+        if (sharedpreferences.contains(phoneNumber)) {
+            et_mobile_num.setText(tel.substring(3));
         }
 
-        @Override
-        public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
-        }
-
-        @Override
-        public void surfaceDestroyed(SurfaceHolder holder) {
-                cameraSource.stop();
-        }
-    });
-
-    barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
-        @Override
-        public void release() {
-
-        }
-
-        @Override
-        public void receiveDetections(Detector.Detections<Barcode> detections) {
-            final SparseArray<Barcode> qrCodes = detections.getDetectedItems();
-
-            if(qrCodes.size() != 0){
-                camSerialNum.post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
-                        vibrator.vibrate(100);
-                        camSerialNum.setText(qrCodes.valueAt(0).displayValue);
-                        btn_accept.setVisibility(View.VISIBLE);
-                        btn_skip.setVisibility(View.GONE);
-
-                        Intent i = new Intent(getActivity(), WifiDeviceActivity.class);
-                        i.putExtra("BT_ADDRESS", camSerialNum.getText()); //this will be received at ledControl (class) Activity
-                        startActivity(i);
-                    }
-
-                });
-            }
-        }
-    });
-
-    btn_accept.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            openMain();
-        }
-    });
-
-    btn_skip.setOnClickListener(new View.OnClickListener() {
+        btn_skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openskipMain();
+                openMain();
             }
         });
+        btn_add_phone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BackgroundTask backgroundTask = new BackgroundTask(getContext());
+                String dType = "telefon";
+                String dName = et_mobile_name.getText().toString();
+                String dMac = et_mobile_num.getText().toString();
+                String dUser =  sharedpreferences.getString(Name,"");
+                String dGroupId = sharedpreferences.getString(Group, "");
+                backgroundTask.execute("addDevice", dName,dType, dMac, dUser, dGroupId );
+                openMain();
+            }
+        });
+
+        et_mobile_num.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                hideKeyboard(v);
+            }
+        });
+
+        et_mobile_name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                hideKeyboard(v);
+            }
+        });
+
     return view;
     }
 
-    public void openMain(){
-        getActivity().finish();
-        Intent intent = new Intent(getActivity(), MainActivity.class);
-        startActivity(intent);
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager =(InputMethodManager)getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    public void openskipMain(){
+    public void openMain(){
         getActivity().finish();
         Intent intent = new Intent(getActivity(), MainActivity.class);
         startActivity(intent);

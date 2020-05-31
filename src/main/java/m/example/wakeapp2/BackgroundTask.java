@@ -45,6 +45,9 @@ public class BackgroundTask extends AsyncTask<String, String, String> {
         String changeRole = "http://www.projektbudzik.pl/php/phpchangerole.php";
         String addDevice = "http://www.projektbudzik.pl/php/phpadddevice.php";
         String removeDevice = "http://www.projektbudzik.pl/php/phpremovedevice.php";
+        String removeAlarm = "http://www.projektbudzik.pl/php/phpremovealarm.php";
+        String addAlarm = "http://www.projektbudzik.pl/php/phpaddalarm.php";
+        String editlarm = "http://www.projektbudzik.pl/php/phpeditalarm.php";
 
         if(type.equals("userreg")){
             String username = strings[1];
@@ -473,6 +476,180 @@ public class BackgroundTask extends AsyncTask<String, String, String> {
                     InputStream inputStream = httpURLConnection.getInputStream();
                     BufferedReader bufferedReader = new BufferedReader (new InputStreamReader(inputStream,"iso-8859-1"));
                     String response = "" ;
+                    String line;
+                    while ((line = bufferedReader.readLine())!=null)
+                    {
+                        response+= line;
+                    }
+                    bufferedReader.close();
+                    inputStream.close();
+                    httpURLConnection.disconnect();
+                    return response;
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+            }catch (MalformedURLException e){
+                e.printStackTrace();
+            }
+        }
+        else if(type.equals("removeAlarm"))        {
+            String aId = strings[1];
+            try {
+                URL url = new URL(removeAlarm);
+                try{
+                    HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
+                    httpURLConnection.setRequestMethod("POST");
+                    httpURLConnection.setDoOutput(true);
+                    httpURLConnection.setDoInput(true);
+                    OutputStream outputStream = httpURLConnection.getOutputStream();
+                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream,"UTF-8"));
+                    String data = URLEncoder.encode("aId","UTF-8")+"="+URLEncoder.encode(aId,"UTF-8");
+                    bufferedWriter.write(data);
+                    bufferedWriter.flush();
+                    bufferedWriter.close();
+                    outputStream.close();
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    BufferedReader bufferedReader = new BufferedReader (new InputStreamReader(inputStream,"iso-8859-1"));
+                    String response = "" ;
+                    String line;
+                    while ((line = bufferedReader.readLine())!=null)
+                    {
+                        response+= line;
+                    }
+                    bufferedReader.close();
+                    inputStream.close();
+                    httpURLConnection.disconnect();
+                    return response;
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+            }catch (MalformedURLException e){
+                e.printStackTrace();
+            }
+        }
+        else if(type.equals("addAlarm"))        {
+            String aDateStart = strings[1];
+            String aTime = strings[2];
+            String aDeviceId = strings[3];
+            String aCreate_by = strings[4];
+            String aSequence = strings[5];
+            String aDateEnd = strings[6];
+            try {
+                URL url = new URL(addAlarm);
+                try{
+                    HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
+                    httpURLConnection.setRequestMethod("POST");
+                    httpURLConnection.setDoOutput(true);
+                    httpURLConnection.setDoInput(true);
+                    OutputStream outputStream = httpURLConnection.getOutputStream();
+                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream,"UTF-8"));
+                    String data = URLEncoder.encode("aDateStart","UTF-8")+"="+URLEncoder.encode(aDateStart,"UTF-8")+"&"+
+                            URLEncoder.encode("aTime","UTF-8")+"="+URLEncoder.encode(aTime,"UTF-8")+"&"+
+                            URLEncoder.encode("aDeviceId","UTF-8")+"="+URLEncoder.encode(aDeviceId,"UTF-8")+"&"+
+                            URLEncoder.encode("aCreate_by","UTF-8")+"="+URLEncoder.encode(aCreate_by,"UTF-8")+"&"+
+                            URLEncoder.encode("aSequence","UTF-8")+"="+URLEncoder.encode(aSequence,"UTF-8")+"&"+
+                            URLEncoder.encode("aDateEnd","UTF-8")+"="+URLEncoder.encode(aDateEnd,"UTF-8");
+                    bufferedWriter.write(data);
+                    bufferedWriter.flush();
+                    bufferedWriter.close();
+                    outputStream.close();
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    BufferedReader bufferedReader = new BufferedReader (new InputStreamReader(inputStream,"iso-8859-1"));
+                    String response = "" ;
+                    String line;
+                    while ((line = bufferedReader.readLine())!=null)
+                    {
+                        response+= line;
+                    }
+                    bufferedReader.close();
+                    inputStream.close();
+                    httpURLConnection.disconnect();
+                    return response;
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+            }catch (MalformedURLException e){
+                e.printStackTrace();
+            }
+        }
+        else if(type.equals("addAlarms"))        {
+
+            String aDateStart = strings[1];
+            String aTime = strings[2];
+            String aDeviceId = strings[3];
+            String aCreate_by = strings[4];
+
+            try {
+                URL url = new URL(addAlarm);
+                try{
+                    HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
+                    httpURLConnection.setRequestMethod("POST");
+                    httpURLConnection.setDoOutput(true);
+                    httpURLConnection.setDoInput(true);
+                    OutputStream outputStream = httpURLConnection.getOutputStream();
+                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream,"UTF-8"));
+                    String data = URLEncoder.encode("aDateStart","UTF-8")+"="+URLEncoder.encode(aDateStart,"UTF-8")+"&"+
+                            URLEncoder.encode("aTime","UTF-8")+"="+URLEncoder.encode(aTime,"UTF-8")+"&"+
+                            URLEncoder.encode("aDeviceId","UTF-8")+"="+URLEncoder.encode(aDeviceId,"UTF-8")+"&"+
+                            URLEncoder.encode("aCreate_by","UTF-8")+"="+URLEncoder.encode(aCreate_by,"UTF-8");
+                    bufferedWriter.write(data);
+                    bufferedWriter.flush();
+                    bufferedWriter.close();
+                    outputStream.close();
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    BufferedReader bufferedReader = new BufferedReader (new InputStreamReader(inputStream,"iso-8859-1"));
+                    String response = "" ;
+                    String line;
+                    while ((line = bufferedReader.readLine())!=null)
+                    {
+                        response+= line;
+                    }
+                    bufferedReader.close();
+                    inputStream.close();
+                    httpURLConnection.disconnect();
+
+                    Log.e("Alarm", response);
+                    return response;
+
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+            }catch (MalformedURLException e){
+                e.printStackTrace();
+            }
+        }
+        else if(type.equals("editAlarm"))        {
+
+            String aDateStart = strings[1];
+            String aTime = strings[2];
+            String aDeviceId = strings[3];
+            String aId = strings[6];
+            String aSequence = strings[4];
+            String aDateEnd = strings[5];
+
+            try {
+                URL url = new URL(editlarm);
+                try{
+                    HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
+                    httpURLConnection.setRequestMethod("POST");
+                    httpURLConnection.setDoOutput(true);
+                    httpURLConnection.setDoInput(true);
+                    OutputStream outputStream = httpURLConnection.getOutputStream();
+                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream,"UTF-8"));
+                    String data = URLEncoder.encode("aDateStart","UTF-8")+"="+URLEncoder.encode(aDateStart,"UTF-8")+"&"+
+                            URLEncoder.encode("aTime","UTF-8")+"="+URLEncoder.encode(aTime,"UTF-8")+"&"+
+                            URLEncoder.encode("aDeviceId","UTF-8")+"="+URLEncoder.encode(aDeviceId,"UTF-8")+"&"+
+                            URLEncoder.encode("aId","UTF-8")+"="+URLEncoder.encode(aId,"UTF-8")+"&"+
+                            URLEncoder.encode("aSequence","UTF-8")+"="+URLEncoder.encode(aSequence,"UTF-8")+"&"+
+                            URLEncoder.encode("aDateEnd","UTF-8")+"="+URLEncoder.encode(aDateEnd,"UTF-8");
+                    bufferedWriter.write(data);
+                    bufferedWriter.flush();
+                    bufferedWriter.close();
+                    outputStream.close();
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    BufferedReader bufferedReader = new BufferedReader (new InputStreamReader(inputStream,"iso-8859-1"));
+                    String response = "" ;
+
                     String line;
                     while ((line = bufferedReader.readLine())!=null)
                     {

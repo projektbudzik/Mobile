@@ -30,7 +30,6 @@ import static android.Manifest.permission.READ_PHONE_STATE;
 
 public class Login2Activity extends AppCompatActivity {
 
-
     public static final String Name = "nameKey";
     public static final String Email = "emailKey";
     public static final String phoneNumber = "numberKey";

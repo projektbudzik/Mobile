@@ -8,9 +8,11 @@ import androidx.fragment.app.Fragment;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -43,7 +45,7 @@ public class userRegisterFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_user_register, container, false);
+        final View view = inflater.inflate(R.layout.fragment_user_register, container, false);
 
 
         btnReg = view.findViewById(R.id.btn_register);
@@ -116,6 +118,31 @@ public class userRegisterFragment extends Fragment {
             }
         };
 
+        txtName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                hideKeyboard(v);
+            }
+        });
+        txtEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                hideKeyboard(v);
+            }
+        });
+        txtPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                hideKeyboard(v);
+            }
+        });
+        txtConfirmPasswod.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                hideKeyboard(v);
+            }
+        });
+
         txtConfirmPasswod.addTextChangedListener(textWatcher);
         txtEmail.addTextChangedListener(textWatcher);
         txtPassword.addTextChangedListener(textWatcher);
@@ -145,8 +172,8 @@ public class userRegisterFragment extends Fragment {
                 JSONreader jsoNreader = new JSONreader();
 
                 String getStatus = jsoNreader.readJSONdata(callbackMsg, "status");
-
-                if (getStatus.equals("gotowe")) {
+                Log.e("Co je grane", getStatus);
+                if (getStatus.equals("Gotowe")) {
 
                     sharedpreferences = getContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
                     SharedPreferences.Editor editor = sharedpreferences.edit();
@@ -155,12 +182,13 @@ public class userRegisterFragment extends Fragment {
                     String getName = jsoNreader.readJSONdata(callbackMsg, "name");
                     String getEmail = jsoNreader.readJSONdata(callbackMsg, "Email");
 
+
                     editor.putString(Email, getEmail);
                     editor.putString(Name, getName);
                     editor.putString(Role, getRole);
 
                     editor.commit();
-
+                    hideKeyboard(view);
                     getActivity().finish();
                     Intent intent = new Intent(getActivity(), LoginActivity.class);
                     intent.putExtra("EMAIL", email);
@@ -170,6 +198,11 @@ public class userRegisterFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager =(InputMethodManager)getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }
 

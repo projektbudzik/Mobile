@@ -23,6 +23,7 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,7 +62,6 @@ public class AddDiviceFragment extends Fragment  implements DeviceScanerMAC.OnFr
     SharedPreferences.OnSharedPreferenceChangeListener listener;
     public static final String Name = "nameKey";
     public static final String Group_sp = "groupKey";
-
     public static final String adrMAC = "numberAdrMAC";
 
     private OnFragmentInteractionListener mListener;
@@ -90,6 +90,7 @@ public class AddDiviceFragment extends Fragment  implements DeviceScanerMAC.OnFr
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_divice, container, false);
+        btn_dodaj_device = view.findViewById(R.id.btn_dodaj_device);
         et_deviceName = view.findViewById(R.id.et_deviceName);
         radioDevice = view.findViewById(R.id.radioDevice);
         et_deviceMAC = view.findViewById(R.id.et_deviceMAC);
@@ -100,12 +101,10 @@ public class AddDiviceFragment extends Fragment  implements DeviceScanerMAC.OnFr
         listUser =view.findViewById(R.id.listUser);
         userList = new ArrayList<>();
 
-        btn_dodaj_device = view.findViewById(R.id.btn_dodaj_device);
         BackgroundTask backgroundTask = new BackgroundTask(getContext());
         SharedPreferences sharedpreferences = getActivity().getSharedPreferences("MyPref", 0);
         String type="getUsers";
         if (sharedpreferences.contains(Name)) {
-
            GroupId = sharedpreferences.getString(Group_sp, "");
         }
 
@@ -114,10 +113,8 @@ public class AddDiviceFragment extends Fragment  implements DeviceScanerMAC.OnFr
             JSONObject obj = new JSONObject(s.substring(s.indexOf("{"), s.lastIndexOf("}") + 1));
             JSONArray array = obj.getJSONArray("users");
             for (int i=0; i <array.length(); i++){
-
                 JSONObject alarm = array.getJSONObject(i);
                 userList.add(alarm.getString("Name"));
-
             }
 
 
@@ -150,8 +147,6 @@ public class AddDiviceFragment extends Fragment  implements DeviceScanerMAC.OnFr
 
         }
 
-
-
         listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
                 if (prefs.contains(adrMAC)) {
@@ -160,7 +155,6 @@ public class AddDiviceFragment extends Fragment  implements DeviceScanerMAC.OnFr
                     prefs.edit().remove(adrMAC).commit();}
             }
         };
-
         sharedpreferences.registerOnSharedPreferenceChangeListener(listener);
 
 
@@ -208,14 +202,13 @@ public class AddDiviceFragment extends Fragment  implements DeviceScanerMAC.OnFr
             public void onClick(View v) {
                 getActivity().finish();
                 startActivity(getActivity().getIntent());
-
-
             }
         });
 
         btn_dodaj_device.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 BackgroundTask backgroundTask = new BackgroundTask(getContext());
                 String dType;
 
@@ -230,9 +223,12 @@ public class AddDiviceFragment extends Fragment  implements DeviceScanerMAC.OnFr
                 String dUser =  userList.get(listUser.getSelectedItemPosition()+1);
                 SharedPreferences sharedpreferences = getActivity().getSharedPreferences("MyPref", 0);
                 String dGroupId = sharedpreferences.getString(Group_sp, "");
-                Log.e("dddd", dName + dType +  dMac + dUser + dGroupId);
-                backgroundTask.execute("addDevice", dName,dType, dMac, dUser, dGroupId );
 
+                if (dName.length() > 0 && dMac.length() >0 && dUser.length()>0) {
+                    backgroundTask.execute("addDevice", dName, dType, dMac, dUser, dGroupId);
+                }else{
+                    Toast.makeText(getContext(), "Wypełnij wszystkie pola", Toast.LENGTH_LONG).show();
+                }
             }
         });
 

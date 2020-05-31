@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -33,7 +34,6 @@ public class userLoginFragment extends Fragment {
     public static final String Role = "roleKey";
     public static final String Group = "groupKey";
 
-
     public userLoginFragment() {
 
     }
@@ -44,6 +44,7 @@ public class userLoginFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user_login, container, false);
+
 
 
         ValidEmail = view.findViewById(R.id.valid_email_log);
@@ -92,6 +93,20 @@ public class userLoginFragment extends Fragment {
         };
 
         txtLogin.addTextChangedListener(textWatcher);
+
+        txtLogin.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                hideKeyboard(v);
+            }
+        });
+
+        txtPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                hideKeyboard(v);
+            }
+        });
 
         return view;
     }
@@ -144,7 +159,7 @@ public class userLoginFragment extends Fragment {
                 editor.putString(Name, getName);
                 editor.putString(Group, getGroup);
                 editor.putString(Role, getRole);
-
+                hideKeyboard(this.getView());
                 editor.commit();
 
                 getActivity().finish();
@@ -158,5 +173,10 @@ public class userLoginFragment extends Fragment {
                 startActivity(intent);
             }
         }
+    }
+
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager =(InputMethodManager)getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

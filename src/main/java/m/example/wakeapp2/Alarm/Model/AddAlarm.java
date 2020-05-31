@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -14,11 +15,14 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -31,20 +35,30 @@ import android.widget.Toast;
 import com.google.android.gms.vision.text.Line;
 
 import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
+import m.example.wakeapp2.BackgroundTask;
+import m.example.wakeapp2.Device.Model.DeviceScanerMAC;
 import m.example.wakeapp2.R;
 
 
-public class AddAlarm extends Fragment implements DatePickerDialog.OnDateSetListener{
+public class AddAlarm extends Fragment implements AddAlarmDevice.OnFragmentInteractionListener{
 
 
     private OnFragmentInteractionListener mListener;
-
-    Button btn_cofnij, Datepick1;
-    String selectedDate;
-    TimePicker timePicker;
-    EditText startAlarm;
+    SharedPreferences.OnSharedPreferenceChangeListener listener;
+    SharedPreferences sharedpreferences;
+    private Button btn_cofnij,btn_dodaj_alarm;
+    private TimePicker timePicker;
+    String devId;
+    private String selectedDate;
+    private EditText startAlarm, deviceName, endAlarm;
+    public static final String dev_sh = "devKey";
+    public static final String Name = "nameKey";
+    private CheckBox Poniedzialek, Wtorek, Sroda, Czwartek, Piatek, Sobota, Niedziela;
 
     public AddAlarm() {
         // Required empty public constructor
@@ -72,14 +86,57 @@ public class AddAlarm extends Fragment implements DatePickerDialog.OnDateSetList
 
         View view = inflater.inflate(R.layout.fragment_add_alarm, container, false);
 
+        Poniedzialek = view.findViewById(R.id.Pon);
+        Wtorek = view.findViewById(R.id.Wt);
+        Sroda = view.findViewById(R.id.Sr);
+        Czwartek = view.findViewById(R.id.Czw);
+        Piatek = view.findViewById(R.id.Pt);
+        Sobota = view.findViewById(R.id.Sb);
+        Niedziela = view.findViewById(R.id.Nd);
+
+        endAlarm = view.findViewById(R.id.textView5);
+        btn_dodaj_alarm = view.findViewById(R.id.btn_dodaj_alarm);
         timePicker = view.findViewById(R.id.time_picker1);
         timePicker.setIs24HourView(true);
+
         btn_cofnij = view.findViewById(R.id.btn_cofnij);
         startAlarm = view.findViewById(R.id.textView3);
-        startAlarm.setText(   DateFormat.getDateInstance(DateFormat.SHORT).format(Calendar.getInstance().getTime()));
-        Switch sw = view.findViewById(R.id.switch1);
+        deviceName = view.findViewById(R.id.textView4);
+
+        final Switch sw = view.findViewById(R.id.switch1);
         final LinearLayout linearLayout1 = view.findViewById(R.id.LinearLayout1);
         final FragmentManager fm = ((AppCompatActivity)getActivity()).getSupportFragmentManager();
+
+
+        sharedpreferences = getActivity().getApplicationContext().getSharedPreferences("MyPref", 0);
+        if (sharedpreferences.contains(dev_sh)){
+            sharedpreferences.edit().remove(dev_sh).commit();
+        }
+            listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+                public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+                if (prefs.contains(dev_sh)) {
+                    String defaultValue = prefs.getString(dev_sh, "");
+                    deviceName.setText(defaultValue);
+                    devId = defaultValue.substring(0,5);
+                    deviceName.setText(defaultValue.substring(7));
+                    prefs.edit().remove(dev_sh).commit();
+                }
+            }
+        };
+        sharedpreferences.registerOnSharedPreferenceChangeListener(listener);
+
+        deviceName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddAlarmDevice fragment = AddAlarmDevice.newInstance();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.setCustomAnimations(R.anim.exit_from_right, R.anim.exit_to_right, R.anim.exit_from_right, R.anim.exit_to_right);
+                transaction.addToBackStack(null);
+                transaction.add(R.id.fragment_container_addDev, fragment, "BLANK_FRAGMENT").commit();
+            }
+        });
+
         startAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,8 +148,81 @@ public class AddAlarm extends Fragment implements DatePickerDialog.OnDateSetList
             }
         });
 
+        endAlarm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppCompatDialogFragment newFragment = new m.example.wakeapp2.Alarm.Model.DatePicker();
+                // set the targetFragment to receive the results, specifying the request code
+                newFragment.setTargetFragment(AddAlarm.this, 12);
+                // show the datePicker
+                newFragment.show(fm, "datePicker2");
+            }
+        });
 
+        btn_dodaj_alarm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                String DateStart = startAlarm.getText().toString();
+                String Time = timePicker.getHour() + ":" + timePicker.getMinute() + ":00";
+                String DeviceId = devId;
+                String Create_by = sharedpreferences.getString(Name, "");
+                String Sequence = "";
+                String DateEnd = "";
+
+                if(sw.isChecked()) {
+
+                    String pon = "", wt = "", sr = "", czw = "", pt = "", sob = "", ndz = "";
+                    if (Poniedzialek.isChecked()) {
+                        pon = "1";
+                    }
+                    if (Wtorek.isChecked()) {
+                        wt = "2";
+                    }
+                    if (Sroda.isChecked()) {
+                        sr = "3";
+                    }
+                    if (Czwartek.isChecked()) {
+                        czw = "4";
+                    }
+                    if (Piatek.isChecked()) {
+                        pt = "5";
+                    }
+                    if (Sobota.isChecked()) {
+                        sob = "6";
+                    }
+                    if (Niedziela.isChecked()) {
+                        ndz = "7";
+                    }
+
+                    Sequence = pon + wt + sr + czw + pt + sob + ndz;
+                    if (Sequence.length() == 0){
+                        Toast.makeText(getContext(), "Newybrano żadnego dnia w sekwencji", Toast.LENGTH_LONG).show();
+                    }else{
+                        DateEnd = endAlarm.getText().toString();
+                        if (DateStart.length() > 1 && DeviceId.length() > 1 && DateEnd.length() > 1 ) {
+                            String type = "addAlarm";
+                            BackgroundTask backgroundTask = new BackgroundTask(getContext());
+                            backgroundTask.execute(type, DateStart, Time, DeviceId, Create_by, Sequence, DateEnd);
+                        }else {
+                            Toast.makeText(getContext(), "Uzupełnij wszystkie pola", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                } else {
+                    if (DateStart.length() > 1 && deviceName.getText().length() > 1 ) {
+                        String type = "addAlarms";
+                        BackgroundTask backgroundTask = new BackgroundTask(getContext());
+                        backgroundTask.execute(type, DateStart, Time, DeviceId, Create_by);
+                    }else {
+                        Toast.makeText(getContext(), "Uzupełnij wszystkie pola", Toast.LENGTH_LONG).show();
+                    }
+
+                }
+
+                getActivity().finish();
+                startActivity(getActivity().getIntent());
+            }
+        });
 
         sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -103,6 +233,7 @@ public class AddAlarm extends Fragment implements DatePickerDialog.OnDateSetList
                 }
             }
         });
+
         btn_cofnij.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,18 +242,61 @@ public class AddAlarm extends Fragment implements DatePickerDialog.OnDateSetList
             }
         });
 
-
         return view;
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == 11 && resultCode == Activity.RESULT_OK) {
-            // get date from string
-             selectedDate = data.getStringExtra("selectedDate");
-            // set the value of the editText
-            startAlarm.setText(selectedDate);
+            selectedDate = data.getStringExtra("selectedDate");
+            Date date = null;
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+            try {
+                date = format.parse(selectedDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Date currentDate = new Date();
+            Calendar c = Calendar.getInstance();
+            c.setTime(currentDate);
+            c.add(Calendar.DATE, -1);
+
+            if(date.before(c.getTime())){
+                Toast.makeText(getContext(), "Wybrana data już mineła", Toast.LENGTH_LONG).show();
+            }else {
+                startAlarm.setText(selectedDate);
+            }
         }
+
+
+
+            if (requestCode == 12 && resultCode == Activity.RESULT_OK) {
+                if (startAlarm.getText().length() > 1) {
+                    Date date = null, date2 = null;
+                    selectedDate = data.getStringExtra("selectedDate");
+                    SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                    try {
+                        date = format.parse(startAlarm.getText().toString());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        date2 = format.parse(selectedDate);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    if (date.before(date2)) {
+                        endAlarm.setText(selectedDate);
+                    } else {
+                        Toast.makeText(getContext(), "Ustaw datę późniejszą niż start", Toast.LENGTH_LONG).show();
+                    }
+
+
+                } else {
+                    Toast.makeText(getContext(), "Nie wybrano daty uruchomienia alarmu", Toast.LENGTH_LONG).show();
+                }
+            }
     }
 
     public void sendBack() {
@@ -146,6 +320,12 @@ public class AddAlarm extends Fragment implements DatePickerDialog.OnDateSetList
         super.onDetach();
         mListener = null;
     }
+
+    @Override
+    public void onFragmentInteraction() {
+
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -157,19 +337,10 @@ public class AddAlarm extends Fragment implements DatePickerDialog.OnDateSetList
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
+
         void onFragmentInteraction(String sendBackText);
     }
 
-    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.YEAR, year);
-        c.set(Calendar.MONTH, month);
-        c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        String currentDateString = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
-        EditText editText = view.findViewById(R.id.textView3);
-        editText.setText(currentDateString);
-    }
 }
 
 

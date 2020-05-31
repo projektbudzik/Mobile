@@ -6,7 +6,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".group_log_reg.groupRegisterFragment"
-    android:background="@drawable/bakground_gradient">
+    android:background="@drawable/bakground_gradient"
+    android:clickable="true"
+    android:focusableInTouchMode="true">
     <ImageView
         android:id="@+id/Logo"
         android:layout_width="match_parent"
@@ -29,13 +31,17 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:clickable="true"
+        android:focusableInTouchMode="true">
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusableInTouchMode="true">
 
             <TextView
                 android:id="@+id/tv_logo"
@@ -66,8 +72,8 @@
             android:orientation="vertical"
             android:paddingTop="20dp"
             android:paddingBottom="20dp"
-
-            >
+            android:clickable="true"
+            android:focusableInTouchMode="true">
 
             <EditText
                 android:autofillHints="Nazwa grupy"
@@ -145,7 +151,9 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:clickable="true"
+                android:focusableInTouchMode="true">
 
                 <Button
                     android:id="@+id/btn_register"

@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".group_log_reg.groupLoginFragment"
-    android:background="@drawable/bakground_gradient">
+    android:background="@drawable/bakground_gradient"
+    >
 
 
     <ImageView

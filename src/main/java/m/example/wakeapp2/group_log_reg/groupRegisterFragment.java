@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -100,6 +101,25 @@ public class groupRegisterFragment extends Fragment {
 
         };
 
+        etxt_name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                hideKeyboard(v);
+            }
+        });
+        etxt_password.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                hideKeyboard(v);
+            }
+        });
+        etxt_repassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                hideKeyboard(v);
+            }
+        });
+
         etxt_name.addTextChangedListener(textWatcher);
         etxt_password.addTextChangedListener(textWatcher);
         etxt_repassword.addTextChangedListener(textWatcher);
@@ -114,7 +134,6 @@ public class groupRegisterFragment extends Fragment {
                 BackgroundTask backgroundTask = new BackgroundTask(getActivity().getApplicationContext());
 
                 String callbackMsg = "";
-
 
                 try {
                     callbackMsg = backgroundTask.execute(type, username, password, email).get();
@@ -145,5 +164,10 @@ public class groupRegisterFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager =(InputMethodManager)getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

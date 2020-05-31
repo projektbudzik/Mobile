@@ -72,12 +72,12 @@ public class AlarmActivity extends AppCompatActivity implements AddAlarm.OnFragm
             for (int i=0; i <array.length(); i++){
                 JSONObject alarm = array.getJSONObject(i);
                 ListMySQl p = new ListMySQl(
-                        alarm.getString("AlarmId"),alarm.getString("DateStart"),alarm.getString("Sequence"),alarm.getString("DateEnd"),alarm.getString("Time"),alarm.getString("DeviceId"),alarm.getString("Comment")
+                        alarm.getString("AlarmId"),alarm.getString("DateStart"),alarm.getString("Sequence"),alarm.getString("DateEnd"),alarm.getString("Time"),alarm.getString("DeviceId"),alarm.getString("Comment"),alarm.getString("Create_by"),alarm.getString("UserName"),alarm.getString("DeviceName")
                 );
                 AlarmList.add(p);
 
             }
-            ListMySqlAdapter adapter = new ListMySqlAdapter(AlarmList, getApplicationContext());
+            ListMySqlAdapter adapter = new ListMySqlAdapter(AlarmList, AlarmActivity.this);
             listview.setAdapter(adapter);
         } catch (ExecutionException e) {
             e.printStackTrace();
@@ -111,6 +111,8 @@ public class AlarmActivity extends AppCompatActivity implements AddAlarm.OnFragm
         });
     }
 
+
+
     public void openFragment() {
         AddAlarm fragment = AddAlarm.newInstance();
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -118,21 +120,6 @@ public class AlarmActivity extends AppCompatActivity implements AddAlarm.OnFragm
         transaction.setCustomAnimations(R.anim.exit_from_right, R.anim.exit_to_right, R.anim.exit_from_right, R.anim.exit_to_right);
         transaction.addToBackStack(null);
         transaction.add(R.id.fragment_container, fragment, "BLANK_FRAGMENT").commit();
-    }
-
-
-
-
-    private void ServiceCaller (Intent intent){
-//        stopService(intent);
-//
-//        Integer alarmHour = timePicker.getHour();
-//        Integer alarmMinute = timePicker.getMinute();
-//
-//        intent.putExtra("alarmHour", alarmHour);
-//        intent.putExtra("alarmMinute", alarmMinute);
-//
-//        startService(intent);
     }
 
     @Override
