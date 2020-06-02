@@ -40,12 +40,14 @@ public class Login2Activity extends AppCompatActivity {
         setContentView(R.layout.activity_login2);
         ViewPager viewPager = findViewById(R.id.viewPager2);
 
-        AuthenticationPagerAdapter pagerAdapterUser = new AuthenticationPagerAdapter(getSupportFragmentManager());
+        AuthenticationPagerAdapter pagerAdapterUser =
+                new AuthenticationPagerAdapter(getSupportFragmentManager());
         pagerAdapterUser.addFragmet(new groupWelcomeFragment());
         pagerAdapterUser.addFragmet(new userStartFragment());
         pagerAdapterUser.addFragmet(new userLoginFragment());
         pagerAdapterUser.addFragmet(new userRegisterFragment());
         viewPager.setAdapter(pagerAdapterUser);
+
 
 
         SharedPreferences sharedPreferences = getSharedPreferences("MyPref", 0); // 0 - for private mode
@@ -67,11 +69,10 @@ public class Login2Activity extends AppCompatActivity {
                         PackageManager.PERMISSION_GRANTED ) {
             TelephonyManager tMgr = (TelephonyManager)   this.getSystemService(Context.TELEPHONY_SERVICE);
             String mPhoneNumber = tMgr.getLine1Number();
-
-
+            mPhoneNumber = mPhoneNumber.substring(mPhoneNumber.length() - 9);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(phoneNumber, mPhoneNumber);
-            editor.commit();
+            editor.apply();
             return;
         } else {
             requestPermission();
@@ -110,7 +111,7 @@ public class Login2Activity extends AppCompatActivity {
     class AuthenticationPagerAdapter  extends FragmentPagerAdapter {
         private ArrayList<Fragment> fragmentList = new ArrayList<>();
 
-        public AuthenticationPagerAdapter (FragmentManager fm) {
+        AuthenticationPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 

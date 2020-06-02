@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,18 +27,16 @@ import m.example.wakeapp2.R;
 
 public class userLoginFragment extends Fragment {
 
-    SharedPreferences sharedpreferences;
-    public static final String Name = "nameKey";
-    public static final String Email = "emailKey";
-    public static final String Role = "roleKey";
-    public static final String Group = "groupKey";
+    private static final String Name = "nameKey";
+    private static final String Email = "emailKey";
+    private static final String Role = "roleKey";
+    private static final String Group = "groupKey";
 
     public userLoginFragment() {
 
     }
-    EditText txtLogin, txtPassword;
-    TextView ValidEmail;
-    Boolean isAuthorized;
+    private EditText txtLogin, txtPassword;
+    private TextView ValidEmail;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -112,41 +109,39 @@ public class userLoginFragment extends Fragment {
     }
 
     public void openMain(){
-        String username = txtLogin.getText().toString();
-        String password = txtPassword.getText().toString();
-        String callbackMsg = "";
+
+
         String callbackMsg1 = "";
         String type="userGroup";
         String type1="userlog";
-        BackgroundTask backgroundTask = new BackgroundTask(getActivity().getApplicationContext());
+
         BackgroundTask backgroundTask2 = new BackgroundTask(getActivity().getApplicationContext());
 
         JSONreader jsoNreader = new JSONreader();
 
-        sharedpreferences = getContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+        SharedPreferences sharedpreferences = getContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
         SharedPreferences.Editor editor = sharedpreferences.edit();
 
 
-
+        String username = txtLogin.getText().toString();
+        String password = txtPassword.getText().toString();
+        BackgroundTask backgroundTask = new BackgroundTask(getActivity().getApplicationContext());
+        String callbackMsg = "";
             try {
-                callbackMsg = backgroundTask2.execute(type, username).get();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
+                callbackMsg = backgroundTask2.execute(type, username, password).get();
+            } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
 
-            String getGroup = jsoNreader.readJSONdata(callbackMsg, "groupID");
+        String getGroup = jsoNreader.readJSONdata(callbackMsg, "groupID");
 
             try {
                 callbackMsg1 = backgroundTask.execute(type1, username, password).get();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
+            } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
 
-            String getStatus = jsoNreader.readJSONdata(callbackMsg1, "status");
+        String getStatus = jsoNreader.readJSONdata(callbackMsg1, "status");
 
         if (getStatus.equals("OK")){
             if (getGroup != "null") {

@@ -68,4 +68,11 @@
     <!-- TODO: MAIN -->
     <string name="main_Data">Sobota, 31 marzec 2020</string>
     <string name="wrong_validation_login">Nieprawidłowy login lub hasło</string>
+    <string name="btn_txt_confnij">Cofnij</string>
+    <string name="btn_logout">Wyloguj</string>
+    <string name="sets_ustawienia_konta">Ustawienia konta</string>
+    <string name="sets_nazwa_u_ytkownika">Nazwa użytkownika</string>
+    <string name="sets_adres_email">Adres email</string>
+    <string name="sets_numer_relefonu">Numer relefonu</string>
+    <string name="sets_nazwa_grupy">Nazwa grupy</string>
 </resources>

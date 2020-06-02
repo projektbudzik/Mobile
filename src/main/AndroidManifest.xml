@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="m.example.wakeapp2"
     android:targetSandboxVersion="1">
 
@@ -21,8 +22,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true">
-        <activity android:name=".Alarm.Model.EditAlarm"></activity>
+        android:usesCleartextTraffic="true"
+        tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".Settings"></activity>
+        <activity android:name=".Alarm.Model.EditAlarm" />
         <activity android:name=".Device.Model.DeviceActivity" />
         <activity android:name=".User.Model.UserActivity" />
 
@@ -33,6 +36,10 @@
         <activity android:name=".WifiDeviceActivity" />
         <activity android:name=".AlarmON" />
 
+        <service
+            android:name=".AlarmCheck"
+            android:enabled="true"
+            android:exported="true" />
         <service android:name=".AlarmService" />
 
         <activity android:name=".Notifications" />

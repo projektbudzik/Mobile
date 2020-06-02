@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,7 +61,8 @@ public class ListMySqlAdapter extends ArrayAdapter<ListMySQl> {
         alarmDateStart.setText(listMySQl.getDateStart());
         alarmTime.setText(listMySQl.getTime());
 
-        if (listMySQl.getDateEnd() == "null") {
+        if (listMySQl.getDateEnd().equals("null") || listMySQl.getDateEnd().substring(0,4).equals("1970")) {
+
             LinSekwencja.setVisibility(View.GONE);
             LinDataEnd.setVisibility(View.GONE);
         } else {

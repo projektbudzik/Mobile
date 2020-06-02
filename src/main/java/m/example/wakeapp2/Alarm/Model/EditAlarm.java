@@ -224,7 +224,6 @@ public class EditAlarm extends AppCompatActivity {
                         if (DateStart.length() > 1 && DeviceId.length() > 1 && DateEnd.length() > 1 ) {
                             String type = "editAlarm";
                             BackgroundTask backgroundTask = new BackgroundTask(getApplicationContext());
-
                             backgroundTask.execute(type, DateStart, Time, DeviceId, Sequence, DateEnd, aId);
                         }else {
                             Toast.makeText(getApplicationContext(), "Uzupełnij wszystkie pola", Toast.LENGTH_LONG).show();
@@ -234,15 +233,14 @@ public class EditAlarm extends AppCompatActivity {
                     if (DateStart.length() > 1 && deviceName.getText().length() > 1 ) {
                         String type = "editAlarm";
                         BackgroundTask backgroundTask = new BackgroundTask(getApplicationContext());
-                        backgroundTask.execute(type, DateStart, Time, DeviceId, NULL, NULL, aId);
+                        backgroundTask.execute(type, DateStart, Time, DeviceId, NULL, "", aId);
                     }else {
                         Toast.makeText(getApplicationContext(), "Uzupełnij wszystkie pola", Toast.LENGTH_LONG).show();
                     }
 
                 }
                 finish();
-                Intent intent = new Intent(getApplicationContext(), AlarmActivity.class);
-                startActivity(intent);
+
             }
         });
 

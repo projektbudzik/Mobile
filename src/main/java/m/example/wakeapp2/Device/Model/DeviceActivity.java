@@ -50,6 +50,7 @@ public class DeviceActivity extends AppCompatActivity  implements AddDiviceFragm
         BackgroundTask backgroundTask = new BackgroundTask(getApplicationContext());
         deviceList = new ArrayList<>();
         sharedpreferences = getSharedPreferences("MyPref", 0);
+
         type="getDevices";
         if (sharedpreferences.contains(Name)) {
             GroupId = sharedpreferences.getString(Group_sp, "");
@@ -61,6 +62,7 @@ public class DeviceActivity extends AppCompatActivity  implements AddDiviceFragm
             String s = backgroundTask.execute(type, Role, Email, GroupId).get();
             JSONObject obj = new JSONObject(s.substring(s.indexOf("{"), s.lastIndexOf("}") + 1));
             JSONArray array = obj.getJSONArray("devices");
+
             for (int i=0; i <array.length(); i++){
                 JSONObject device = array.getJSONObject(i);
                 ListDevice p = new ListDevice(

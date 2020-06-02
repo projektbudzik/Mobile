@@ -20,6 +20,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 import m.example.wakeapp2.group_log_reg.LoginActivity;
 
@@ -48,6 +49,7 @@ public class BackgroundTask extends AsyncTask<String, String, String> {
         String removeAlarm = "http://www.projektbudzik.pl/php/phpremovealarm.php";
         String addAlarm = "http://www.projektbudzik.pl/php/phpaddalarm.php";
         String editlarm = "http://www.projektbudzik.pl/php/phpeditalarm.php";
+        String getAlarm = "http://www.projektbudzik.pl/php/phpaktualnebudzenie.php";
 
         if(type.equals("userreg")){
             String username = strings[1];
@@ -109,7 +111,7 @@ public class BackgroundTask extends AsyncTask<String, String, String> {
                     httpURLConnection.setDoOutput(true);
                     httpURLConnection.setDoInput(true);
                     OutputStream outputStream = httpURLConnection.getOutputStream();
-                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream,"UTF-8"));
+                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
                     String data = URLEncoder.encode("name","UTF-8")+"="+URLEncoder.encode(login_name,"UTF-8")+"&"+
                             URLEncoder.encode("pass","UTF-8")+"="+URLEncoder.encode(login_pass,"UTF-8");
 
@@ -118,12 +120,12 @@ public class BackgroundTask extends AsyncTask<String, String, String> {
                     bufferedWriter.close();
                     outputStream.close();
                     InputStream inputStream = httpURLConnection.getInputStream();
-                    BufferedReader bufferedReader = new BufferedReader (new InputStreamReader(inputStream,"iso-8859-1"));
+                    BufferedReader bufferedReader = new BufferedReader (new InputStreamReader(inputStream,StandardCharsets.UTF_8));
                     String response = "" ;
                     String line;
                     while ((line = bufferedReader.readLine())!=null)
                     {
-                        response+= line;
+                        response += line;
                     }
                     bufferedReader.close();
                     inputStream.close();
@@ -149,7 +151,7 @@ public class BackgroundTask extends AsyncTask<String, String, String> {
                     httpURLConnection.setDoOutput(true);
                     httpURLConnection.setDoInput(true);
                     OutputStream outputStream = httpURLConnection.getOutputStream();
-                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream,"UTF-8"));
+                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
                     String data = URLEncoder.encode("UserRole","UTF-8")+"="+URLEncoder.encode(UserRole,"UTF-8")+"&"+
                             URLEncoder.encode("Email","UTF-8")+"="+URLEncoder.encode(Email,"UTF-8")+"&"+
                             URLEncoder.encode("GroupId","UTF-8")+"="+URLEncoder.encode(GroupId,"UTF-8");
@@ -159,7 +161,7 @@ public class BackgroundTask extends AsyncTask<String, String, String> {
                     bufferedWriter.close();
                     outputStream.close();
                     InputStream inputStream = httpURLConnection.getInputStream();
-                    BufferedReader bufferedReader = new BufferedReader (new InputStreamReader(inputStream,"iso-8859-1"));
+                    BufferedReader bufferedReader = new BufferedReader (new InputStreamReader(inputStream,StandardCharsets.UTF_8));
                     String response = "" ;
                     String line;
                     while ((line = bufferedReader.readLine())!=null)
@@ -573,7 +575,6 @@ public class BackgroundTask extends AsyncTask<String, String, String> {
             }
         }
         else if(type.equals("addAlarms"))        {
-
             String aDateStart = strings[1];
             String aTime = strings[2];
             String aDeviceId = strings[3];
@@ -642,6 +643,44 @@ public class BackgroundTask extends AsyncTask<String, String, String> {
                             URLEncoder.encode("aId","UTF-8")+"="+URLEncoder.encode(aId,"UTF-8")+"&"+
                             URLEncoder.encode("aSequence","UTF-8")+"="+URLEncoder.encode(aSequence,"UTF-8")+"&"+
                             URLEncoder.encode("aDateEnd","UTF-8")+"="+URLEncoder.encode(aDateEnd,"UTF-8");
+                    bufferedWriter.write(data);
+                    bufferedWriter.flush();
+                    bufferedWriter.close();
+                    outputStream.close();
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    BufferedReader bufferedReader = new BufferedReader (new InputStreamReader(inputStream,"iso-8859-1"));
+                    String response = "" ;
+
+                    String line;
+                    while ((line = bufferedReader.readLine())!=null)
+                    {
+                        response+= line;
+                    }
+                    bufferedReader.close();
+                    inputStream.close();
+                    httpURLConnection.disconnect();
+                    return response;
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+            }catch (MalformedURLException e){
+                e.printStackTrace();
+            }
+        }
+        else if(type.equals("getAlarm"))        {
+
+            String aMAC = strings[1];
+
+            try {
+                URL url = new URL(getAlarm);
+                try{
+                    HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
+                    httpURLConnection.setRequestMethod("POST");
+                    httpURLConnection.setDoOutput(true);
+                    httpURLConnection.setDoInput(true);
+                    OutputStream outputStream = httpURLConnection.getOutputStream();
+                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream,"UTF-8"));
+                    String data = URLEncoder.encode("aMAC","UTF-8")+"="+URLEncoder.encode(aMAC,"UTF-8");
                     bufferedWriter.write(data);
                     bufferedWriter.flush();
                     bufferedWriter.close();

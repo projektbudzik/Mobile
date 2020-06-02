@@ -1,16 +1,13 @@
 package m.example.wakeapp2.group_log_reg;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,12 +26,12 @@ import m.example.wakeapp2.info_log_reg.Login3Activity;
 
 public class groupRegisterFragment extends Fragment {
 
-    EditText etxt_name, etxt_password, etxt_repassword;
-    TextView valid_name, valid_pass, valid_repass;
-    Button btn_register;
-    public static final String Role = "roleKey";
-    public static final String Group = "groupKey";
-    SharedPreferences sharedpreferences;
+    private EditText etxt_name, etxt_password, etxt_repassword;
+    private TextView valid_name, valid_pass, valid_repass;
+    private static final String GroupName = "groupNameKey";
+    private static final String Role = "roleKey";
+    private static final String Group = "groupKey";
+    private SharedPreferences sharedpreferences;
 
     public groupRegisterFragment() {
 // Required empty public constructor
@@ -50,7 +47,7 @@ public class groupRegisterFragment extends Fragment {
         etxt_name = view.findViewById(R.id.et_name);
         etxt_password = view.findViewById(R.id.et_password);
         etxt_repassword = view.findViewById(R.id.et_repassword);
-        btn_register = view.findViewById(R.id.btn_register);
+        Button btn_register = view.findViewById(R.id.btn_register);
         valid_name = view.findViewById(R.id.valid_grp_name);
         valid_pass = view.findViewById(R.id.valid_password);
         valid_repass = view.findViewById(R.id.valid_repassword);
@@ -137,9 +134,7 @@ public class groupRegisterFragment extends Fragment {
 
                 try {
                     callbackMsg = backgroundTask.execute(type, username, password, email).get();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
+                } catch (ExecutionException | InterruptedException e) {
                     e.printStackTrace();
                 }
 
@@ -153,7 +148,8 @@ public class groupRegisterFragment extends Fragment {
                     SharedPreferences.Editor editor = sharedpreferences.edit();
                     editor.putString(Role, "SuperUser");
                     editor.putString(Group, getGroupId);
-                    editor.commit();
+                    editor.putString(GroupName, etxt_name.getText().toString());
+                    editor.apply();
 
                     getActivity().finish();
                     Intent intent = new Intent(getActivity(), Login3Activity.class);

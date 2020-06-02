@@ -32,11 +32,11 @@ public class AlarmON extends AppCompatActivity {
 
     private void ServiceCaller (Intent intent){
         stopService(intent);
-
-
+        stopService(intent);
     }
 
     public void openAlarm(){
+        finish();
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }

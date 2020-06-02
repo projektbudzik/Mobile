@@ -107,13 +107,13 @@
                 android:background="@drawable/button_gradient" />
 
             <Button
-                android:id="@+id/btn_dsa"
+                android:id="@+id/btn_konto"
                 android:textSize="12sp"
                 android:layout_margin="5dp"
                 android:padding="5dp"
                 android:layout_width="0.0dip"
                 android:layout_height="fill_parent"
-                android:text="Ustawienia"
+                android:text="Ustawienia konta"
                 android:textColor="@color/colorBlack"
                 android:layout_weight="1.0"
                 android:drawableTop="@drawable/ic_settings_black_24dp"
@@ -140,18 +140,18 @@
         </LinearLayout>
 
     </LinearLayout>
-    <Button
-        android:id="@+id/btn_logout"
-        android:layout_marginBottom="11dp"
-        android:layout_marginLeft="22dp"
-        android:layout_marginRight="22dp"
-        android:padding="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="38dp"
-        android:text="Wyloguj"
-        android:textColor="@color/colorWhite"
-        android:layout_above="@id/btn_close"
-        android:background="@drawable/button_gradient2_yellow" />
+<!--    <Button-->
+<!--        android:id="@+id/btn_logout"-->
+<!--        android:layout_marginBottom="11dp"-->
+<!--        android:layout_marginLeft="22dp"-->
+<!--        android:layout_marginRight="22dp"-->
+<!--        android:padding="10dp"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="38dp"-->
+<!--        android:text="Wyloguj"-->
+<!--        android:textColor="@color/colorWhite"-->
+<!--        android:layout_above="@id/btn_close"-->
+<!--        android:background="@drawable/button_gradient2_yellow" />-->
     <Button
         android:id="@+id/btn_close"
         android:layout_marginBottom="11dp"
