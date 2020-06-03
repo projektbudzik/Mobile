@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -135,6 +136,7 @@ public class userLoginFragment extends Fragment {
 
         String getGroup = jsoNreader.readJSONdata(callbackMsg, "groupID");
 
+
             try {
                 callbackMsg1 = backgroundTask.execute(type1, username, password).get();
             } catch (ExecutionException | InterruptedException e) {
@@ -145,18 +147,17 @@ public class userLoginFragment extends Fragment {
 
         if (getStatus.equals("OK")){
             if (getGroup != "null") {
-
                 String getRole = jsoNreader.readJSONdata(callbackMsg, "UserRole");
                 String getName = jsoNreader.readJSONdata(callbackMsg, "Name");
                 String getEmail = jsoNreader.readJSONdata(callbackMsg, "Email");
-
+                String getgroupName = jsoNreader.readJSONdata(callbackMsg1, "groupName");
                 editor.putString(Email, getEmail);
                 editor.putString(Name, getName);
                 editor.putString(Group, getGroup);
                 editor.putString(Role, getRole);
+                editor.putString("groupNameKey", getgroupName);
                 hideKeyboard(this.getView());
                 editor.commit();
-
                 getActivity().finish();
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent);

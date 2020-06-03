@@ -73,6 +73,6 @@
     <string name="sets_ustawienia_konta">Ustawienia konta</string>
     <string name="sets_nazwa_u_ytkownika">Nazwa użytkownika</string>
     <string name="sets_adres_email">Adres email</string>
-    <string name="sets_numer_relefonu">Numer relefonu</string>
+    <string name="sets_numer_relefonu">Rola</string>
     <string name="sets_nazwa_grupy">Nazwa grupy</string>
 </resources>

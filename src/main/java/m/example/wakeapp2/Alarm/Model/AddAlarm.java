@@ -58,6 +58,7 @@ public class AddAlarm extends Fragment implements AddAlarmDevice.OnFragmentInter
     private EditText startAlarm, deviceName, endAlarm;
     public static final String dev_sh = "devKey";
     public static final String Name = "nameKey";
+    public static final String Email_sp = "emailKey";
     private CheckBox Poniedzialek, Wtorek, Sroda, Czwartek, Piatek, Sobota, Niedziela;
 
     public AddAlarm() {
@@ -166,7 +167,7 @@ public class AddAlarm extends Fragment implements AddAlarmDevice.OnFragmentInter
                 String DateStart = startAlarm.getText().toString();
                 String Time = timePicker.getHour() + ":" + timePicker.getMinute() + ":00";
                 String DeviceId = devId;
-                String Create_by = sharedpreferences.getString(Name, "");
+                String Create_by = sharedpreferences.getString(Email_sp, "");
                 String Sequence = "";
                 String DateEnd = "";
 

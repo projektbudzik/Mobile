@@ -15,7 +15,7 @@ public class Settings extends AppCompatActivity {
     public static final String Name = "nameKey";
     public static final String GroupName = "groupNameKey";
     public static final String Email = "emailKey";
-    public static final String phoneNumber = "numberKey";
+    public static final String Role = "roleKey";
     Intent intent;
     SharedPreferences sharedPreferences;
     @Override
@@ -36,16 +36,16 @@ public class Settings extends AppCompatActivity {
             tv_sets_name.setText(tName);
         }
         if (sharedPreferences.contains(Email)){
-            String tName = sharedPreferences.getString(Email,"");
-            tv_sets_email.setText(tName);
+            String tEmail = sharedPreferences.getString(Email,"");
+            tv_sets_email.setText(tEmail);
         }
-        if (sharedPreferences.contains(phoneNumber)){
-            String tName = sharedPreferences.getString(phoneNumber,"");
-            tv_sets_phone.setText(tName);
+        if (sharedPreferences.contains(Role)){
+            String tRole = sharedPreferences.getString(Role,"");
+            tv_sets_phone.setText(tRole);
         }
         if (sharedPreferences.contains(GroupName)){
-            String tName = sharedPreferences.getString(GroupName,"");
-            tv_sets_group.setText(tName);
+            String tGroup = sharedPreferences.getString(GroupName,"");
+            tv_sets_group.setText(tGroup);
         }
 
         btn_cofnij.setOnClickListener(new View.OnClickListener() {

@@ -61,10 +61,14 @@ public class ListDeviceAdapter extends ArrayAdapter<ListDevice> {
         deviceMAC.setText(listDevice.getMAC());
         deviceUser.setText(listDevice.getUserName());
         confWIF = view.findViewById(R.id.confWIF);
+
         if(listDevice.getDeviceType().equals("telefon")){
             confWIF.setVisibility(View.GONE);
         }
 
+        if(myRole.equals("User")){
+            usunDevice.setVisibility(View.GONE);
+        }
 
         usunDevice.setOnClickListener(new View.OnClickListener() {
             @Override

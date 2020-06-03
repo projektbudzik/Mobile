@@ -54,14 +54,16 @@ public class AddDiviceFragment extends Fragment  implements DeviceScanerMAC.OnFr
     private TextView deviceMAC, deviceUser;
     private RadioGroup radioDevice;
     private RadioButton radioTelefon;
-    private String defaultValue;
+    private String defaultValue, userName, userRole, type;
     private Button btn_cofnij, btn_dodaj_device;
     ListView listUser;
+    int position_list;
     List<String> userList;
     private String GroupId;
     SharedPreferences.OnSharedPreferenceChangeListener listener;
     public static final String Name = "nameKey";
     public static final String Group_sp = "groupKey";
+    public static final String Role = "roleKey";
     public static final String adrMAC = "numberAdrMAC";
 
     private OnFragmentInteractionListener mListener;
@@ -103,7 +105,10 @@ public class AddDiviceFragment extends Fragment  implements DeviceScanerMAC.OnFr
 
         BackgroundTask backgroundTask = new BackgroundTask(getContext());
         SharedPreferences sharedpreferences = getActivity().getSharedPreferences("MyPref", 0);
-        String type="getUsers";
+        type="getUsers";
+        userName = sharedpreferences.getString(Name, "");
+        userRole = sharedpreferences.getString(Role, "");
+
         if (sharedpreferences.contains(Name)) {
            GroupId = sharedpreferences.getString(Group_sp, "");
         }
@@ -139,9 +144,7 @@ public class AddDiviceFragment extends Fragment  implements DeviceScanerMAC.OnFr
                 }
             });
 
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         } catch (JSONException e)  {
 
@@ -152,7 +155,7 @@ public class AddDiviceFragment extends Fragment  implements DeviceScanerMAC.OnFr
                 if (prefs.contains(adrMAC)) {
                     defaultValue = prefs.getString(adrMAC, "");
                     et_deviceMAC.setText(defaultValue);
-                    prefs.edit().remove(adrMAC).commit();}
+                    prefs.edit().remove(adrMAC).apply();}
             }
         };
         sharedpreferences.registerOnSharedPreferenceChangeListener(listener);
@@ -179,7 +182,19 @@ public class AddDiviceFragment extends Fragment  implements DeviceScanerMAC.OnFr
             }
         });
 
+        listUser.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                position_list = position;
 
+               if (!userList.get(position_list).equals(userName) && userRole.equals("User")){
+                   Toast.makeText(getContext(), "Możesz wybrać tylko siebie", Toast.LENGTH_LONG).show();
+                   listUser.clearChoices();
+                   listUser.requestLayout();
+                   position_list = -1;
+               }
+            }
+        });
 
         et_deviceMAC.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -220,11 +235,12 @@ public class AddDiviceFragment extends Fragment  implements DeviceScanerMAC.OnFr
 
                 String dName = et_deviceName.getText().toString();
                 String dMac = et_deviceMAC.getText().toString();
-                String dUser =  userList.get(listUser.getSelectedItemPosition()+1);
+                String dUser =  userList.get(position_list);
+
                 SharedPreferences sharedpreferences = getActivity().getSharedPreferences("MyPref", 0);
                 String dGroupId = sharedpreferences.getString(Group_sp, "");
 
-                if (dName.length() > 0 && dMac.length() >0 && dUser.length()>0) {
+                if (dName.length() > 0 && dMac.length() >0 && dUser.length()>0 && position_list>=0) {
                     backgroundTask.execute("addDevice", dName, dType, dMac, dUser, dGroupId);
                 }else{
                     Toast.makeText(getContext(), "Wypełnij wszystkie pola", Toast.LENGTH_LONG).show();
@@ -260,7 +276,7 @@ public class AddDiviceFragment extends Fragment  implements DeviceScanerMAC.OnFr
         if (sharedpreferences.contains(adrMAC)) {
             defaultValue = sharedpreferences.getString(adrMAC, "");
             et_deviceMAC.setText(defaultValue);
-            sharedpreferences.edit().remove(adrMAC).commit();
+            sharedpreferences.edit().remove(adrMAC).apply();
         }
     }
 

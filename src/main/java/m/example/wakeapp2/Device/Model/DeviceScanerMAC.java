@@ -120,7 +120,6 @@ public class DeviceScanerMAC extends Fragment {
             public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 
             }
-
             @Override
             public void surfaceDestroyed(SurfaceHolder holder) {
                 cameraSource.stop();
@@ -130,7 +129,6 @@ public class DeviceScanerMAC extends Fragment {
         barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
             @Override
             public void release() {
-
             }
 
             @Override
@@ -142,14 +140,11 @@ public class DeviceScanerMAC extends Fragment {
                         @Override
                         public void run() {
 
-
                             SharedPreferences sharedpreferences = getContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
-
                             SharedPreferences.Editor editor = sharedpreferences.edit();
                             String Mac = (qrCodes.valueAt(0).displayValue).substring(0,17);
                             editor.putString(adrMAC, Mac);
                             editor.commit();
-
                             sendBack();
                             cameraSource.stop();
                             MACadres.setText(Mac);

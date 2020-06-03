@@ -119,30 +119,25 @@ public class DeviceWifi extends Fragment {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
             }
 
             @Override
             public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
             }
 
             @Override
             public void surfaceDestroyed(SurfaceHolder holder) {
                 cameraSource.stop();
-            }
-        });
+            }   });
 
         barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
             @Override
             public void release() {
-
             }
 
             @Override
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> qrCodes = detections.getDetectedItems();
-
                 if(qrCodes.size() != 0){
                     camSerialNum.post(new Runnable() {
                         @Override
@@ -157,7 +152,6 @@ public class DeviceWifi extends Fragment {
                             BT_address = Mac;
                             tv_title.setText("Ustawienia Wi-fi");
                             new ConnectBT().execute();
-
                         }
 
                     });

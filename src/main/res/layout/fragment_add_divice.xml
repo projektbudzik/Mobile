@@ -155,7 +155,6 @@
                 android:layout_width="match_parent"
                 android:id="@+id/listUser"
                 android:choiceMode="singleChoice"
-                android:listSelector="#f1e105"
                 android:layout_height="160dp"/>
 
             <Button

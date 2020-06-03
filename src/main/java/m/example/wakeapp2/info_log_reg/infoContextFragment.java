@@ -40,12 +40,11 @@ import m.example.wakeapp2.WifiDeviceActivity;
 public class infoContextFragment extends Fragment {
 
     private EditText et_mobile_num, et_mobile_name;
-    private static final String phoneNumber = "numberKey";
     public static final String Name = "nameKey";
     public static final String Email = "emailKey";
-    public static final String Group = "groupKey";
+    private static final String Group = "groupKey";
     private SharedPreferences sharedpreferences;
-    private Button btn_skip, btn_add_phone;
+    private String dUser;
 
     public infoContextFragment() {
     }
@@ -56,13 +55,9 @@ public class infoContextFragment extends Fragment {
         et_mobile_num = view.findViewById(R.id.et_mobile_num);
         et_mobile_name = view.findViewById(R.id.et_mobile_name);
         sharedpreferences = getActivity().getSharedPreferences("MyPref", 0);
-        btn_skip = view.findViewById(R.id.btn_skip);
-        btn_add_phone = view.findViewById(R.id.btn_add_phone);
-        String tel = sharedpreferences.getString(phoneNumber, "");
-        if (sharedpreferences.contains(phoneNumber)) {
-            et_mobile_num.setText(tel.substring(3));
-        }
-
+        Button btn_skip = view.findViewById(R.id.btn_skip);
+        Button btn_add_phone = view.findViewById(R.id.btn_add_phone);
+        dUser =  sharedpreferences.getString(Name,"");
         btn_skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,17 +67,22 @@ public class infoContextFragment extends Fragment {
         btn_add_phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 BackgroundTask backgroundTask = new BackgroundTask(getContext());
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.putString("numberKey", et_mobile_num.getText().toString());
+                editor.apply();
+
+
                 String dType = "telefon";
                 String dName = et_mobile_name.getText().toString();
                 String dMac = et_mobile_num.getText().toString();
-                String dUser =  sharedpreferences.getString(Name,"");
                 String dGroupId = sharedpreferences.getString(Group, "");
                 backgroundTask.execute("addDevice", dName,dType, dMac, dUser, dGroupId );
                 openMain();
             }
         });
-
+        et_mobile_name.setText("Telefon "+ dUser);
         et_mobile_num.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -100,12 +100,12 @@ public class infoContextFragment extends Fragment {
     return view;
     }
 
-    public void hideKeyboard(View view) {
+    private void hideKeyboard(View view) {
         InputMethodManager inputMethodManager =(InputMethodManager)getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    public void openMain(){
+    private void openMain(){
         getActivity().finish();
         Intent intent = new Intent(getActivity(), MainActivity.class);
         startActivity(intent);

@@ -19,6 +19,7 @@ import m.example.wakeapp2.BackgroundTask;
 import m.example.wakeapp2.JSONreader;
 import m.example.wakeapp2.MainActivity;
 import m.example.wakeapp2.R;
+import m.example.wakeapp2.info_log_reg.Login3Activity;
 
 
 public class groupLoginFragment extends Fragment {
@@ -90,7 +91,7 @@ public class groupLoginFragment extends Fragment {
                 editor.apply();
 
                 getActivity().finish();
-                Intent intent = new Intent(getActivity(), MainActivity.class);
+                Intent intent = new Intent(getActivity(), Login3Activity.class);
                 startActivity(intent);
 
             }

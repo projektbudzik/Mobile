@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -17,18 +18,18 @@ import java.util.concurrent.ExecutionException;
 import m.example.wakeapp2.Alarm.Model.AlarmActivity;
 import m.example.wakeapp2.Device.Model.DeviceActivity;
 import m.example.wakeapp2.User.Model.UserActivity;
-import m.example.wakeapp2.user_log_reg.Login2Activity;
+import m.example.wakeapp2.info_log_reg.Login3Activity;
+
 
 public class MainActivity extends AppCompatActivity {
     SharedPreferences sharedpreferences;
 
     public static final String Name = "nameKey";
-    public static final String GroupName = "groupNameKey";
     public static final String phoneNumber = "numberKey";
     private String  callbackMsg1;
     TextView tv_title, tv_subtitle;
     private Intent intent;
-
+    Button setNumber;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,8 +40,8 @@ public class MainActivity extends AppCompatActivity {
         Button btn_alarm_mgmt = findViewById(R.id.btn_alarm_mgmt);
         Button btn_close = findViewById(R.id.btn_close);
         Button btn_divice_mgmt = findViewById(R.id.btn_divice_mgmt);
+        setNumber = findViewById(R.id.setNumber);
         Button btn_user_mgmt = findViewById(R.id.btn_user_mgmt);
-        Button btn_logout = findViewById(R.id.btn_logout);
         tv_subtitle = findViewById(R.id.tv_subtitle);
         tv_title = findViewById(R.id.tv_title);
         intent = new Intent(this, AlarmService.class);
@@ -49,6 +50,13 @@ public class MainActivity extends AppCompatActivity {
             String Title = "Witaj, " + sharedpreferences.getString(Name, "");
             tv_title.setText(Title);
         }
+
+        setNumber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openPhoneAct();
+            }
+        });
 
         btn_konto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,27 +130,34 @@ public class MainActivity extends AppCompatActivity {
         stopServices(intent);
         BackgroundTask backgroundTask = new BackgroundTask(getApplicationContext());
         JSONreader jsoNreader = new JSONreader();
-        String phoneN = sharedpreferences.getString(phoneNumber, "");
+        if (sharedpreferences.contains(phoneNumber)) {
+            String phoneN = sharedpreferences.getString(phoneNumber, "");
 
-        try {
-            callbackMsg1 = backgroundTask.execute("getAlarm", phoneN ).get();
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
+            try {
+                callbackMsg1 = backgroundTask.execute("getAlarm", phoneN).get();
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            String alarmDate = jsoNreader.readJSONdata(callbackMsg1, "Closed_date");
+            String alarmTime = jsoNreader.readJSONdata(callbackMsg1, "Time");
+            Log.e("Pozycja", "ok");
+            ServiceCaller(intent, alarmDate);
+            String currentAlarm = "Alarm: " + alarmDate + ", " + alarmTime;
+            tv_subtitle.setText(currentAlarm);
+        }else{
+            tv_subtitle.setText("Nie podano numeru telefonu");
+            setNumber.setVisibility(View.VISIBLE);
         }
-        String alarmDate = jsoNreader.readJSONdata(callbackMsg1, "Closed_date");
-        String alarmTime = jsoNreader.readJSONdata(callbackMsg1, "Time");
-
-        ServiceCaller(intent, alarmDate);
-        String currentAlarm = "Alarm: " + alarmDate +", " + alarmTime;
-        tv_subtitle.setText(currentAlarm);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         getAlarm(intent);
-
     }
+
+
 
     public void openAlarm(){
         Intent intent = new Intent(this, AlarmActivity.class);
@@ -154,6 +169,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void openPhoneAct(){
+        Intent intent = new Intent(this, Login3Activity.class);
+        startActivity(intent);
+    }
     public void openUserAct(){
         Intent intent = new Intent(this, UserActivity.class);
         startActivity(intent);

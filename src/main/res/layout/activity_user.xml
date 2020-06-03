@@ -27,17 +27,14 @@
                 android:textColor="@color/colorWhite"
                 android:textSize="20sp" />
         </RelativeLayout>
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/Relative1"
-            android:layout_above="@+id/LinearLayout1"
-            android:id="@+id/Scroll">
+
             <ListView
+                android:layout_below="@id/Relative1"
                 android:id="@+id/list_alarm"
-                android:layout_width="match_parent"
+                android:layout_above="@id/LinearLayout1"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-        </ScrollView>
+
 
         <LinearLayout
             android:id="@+id/LinearLayout1"
