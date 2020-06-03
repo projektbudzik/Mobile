@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -24,6 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
+import m.example.wakeapp2.AlarmCheck;
 import m.example.wakeapp2.BackgroundTask;
 import m.example.wakeapp2.MainActivity;
 import m.example.wakeapp2.R;
@@ -49,7 +51,6 @@ public class EditAlarm extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_alarm);
-
 
         Poniedzialek = findViewById(R.id.Pon);
         Wtorek = findViewById(R.id.Wt);
@@ -80,6 +81,7 @@ public class EditAlarm extends AppCompatActivity {
         timePicker.setMinute(Integer.parseInt(extras.getString("Time").substring(3,5)));
         deviceName.setText(extras.getString("dName"));
 
+        Log.e("Grupowo",extras.getString("DEnd")+"" );
         if(extras.getString("DEnd").length() > 5){
             sw.setChecked(true);
             linearLayout1.setVisibility(View.VISIBLE);
@@ -225,6 +227,9 @@ public class EditAlarm extends AppCompatActivity {
                             String type = "editAlarm";
                             BackgroundTask backgroundTask = new BackgroundTask(getApplicationContext());
                             backgroundTask.execute(type, DateStart, Time, DeviceId, Sequence, DateEnd, aId);
+                            finish();
+                            Intent intent = new Intent(EditAlarm.this, AlarmActivity.class);
+                            startActivity(intent);
                         }else {
                             Toast.makeText(getApplicationContext(), "Uzupełnij wszystkie pola", Toast.LENGTH_LONG).show();
                         }
@@ -234,12 +239,15 @@ public class EditAlarm extends AppCompatActivity {
                         String type = "editAlarm";
                         BackgroundTask backgroundTask = new BackgroundTask(getApplicationContext());
                         backgroundTask.execute(type, DateStart, Time, DeviceId, NULL, "", aId);
+                        finish();
+                        Intent intent = new Intent(EditAlarm.this, AlarmActivity.class);
+                        startActivity(intent);
                     }else {
                         Toast.makeText(getApplicationContext(), "Uzupełnij wszystkie pola", Toast.LENGTH_LONG).show();
                     }
 
                 }
-                finish();
+
 
             }
         });

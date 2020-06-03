@@ -49,12 +49,7 @@ public class userLoginFragment extends Fragment {
         txtLogin = view.findViewById(R.id.et_login);
         txtPassword = view.findViewById(R.id.et_password);
         Button btn_login = view.findViewById(R.id.btn_login_user);
-        btn_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openMain();
-            }
-        });
+
 
         TextWatcher textWatcher = new TextWatcher() {
 
@@ -106,6 +101,12 @@ public class userLoginFragment extends Fragment {
             }
         });
 
+        btn_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openMain();
+            }
+        });
         return view;
     }
 
@@ -135,7 +136,7 @@ public class userLoginFragment extends Fragment {
             }
 
         String getGroup = jsoNreader.readJSONdata(callbackMsg, "groupID");
-
+        Log.e("Grupowo", getGroup);
 
             try {
                 callbackMsg1 = backgroundTask.execute(type1, username, password).get();
@@ -154,6 +155,7 @@ public class userLoginFragment extends Fragment {
                 editor.putString(Email, getEmail);
                 editor.putString(Name, getName);
                 editor.putString(Group, getGroup);
+
                 editor.putString(Role, getRole);
                 editor.putString("groupNameKey", getgroupName);
                 hideKeyboard(this.getView());

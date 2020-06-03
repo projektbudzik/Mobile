@@ -242,6 +242,9 @@ public class AddDiviceFragment extends Fragment  implements DeviceScanerMAC.OnFr
 
                 if (dName.length() > 0 && dMac.length() >0 && dUser.length()>0 && position_list>=0) {
                     backgroundTask.execute("addDevice", dName, dType, dMac, dUser, dGroupId);
+                    getActivity().finish();
+                    startActivity(getActivity().getIntent());
+
                 }else{
                     Toast.makeText(getContext(), "Wypełnij wszystkie pola", Toast.LENGTH_LONG).show();
                 }

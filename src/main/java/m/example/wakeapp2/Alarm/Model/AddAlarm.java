@@ -50,7 +50,7 @@ public class AddAlarm extends Fragment implements AddAlarmDevice.OnFragmentInter
 
     private OnFragmentInteractionListener mListener;
     SharedPreferences.OnSharedPreferenceChangeListener listener;
-    SharedPreferences sharedpreferences;
+    private SharedPreferences sharedpreferences;
     private Button btn_cofnij,btn_dodaj_alarm;
     private TimePicker timePicker;
     String devId;
@@ -111,8 +111,9 @@ public class AddAlarm extends Fragment implements AddAlarmDevice.OnFragmentInter
 
         sharedpreferences = getActivity().getApplicationContext().getSharedPreferences("MyPref", 0);
         if (sharedpreferences.contains(dev_sh)){
-            sharedpreferences.edit().remove(dev_sh).commit();
+            sharedpreferences.edit().remove(dev_sh).apply();
         }
+
             listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
                 public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
                 if (prefs.contains(dev_sh)) {
@@ -120,7 +121,7 @@ public class AddAlarm extends Fragment implements AddAlarmDevice.OnFragmentInter
                     deviceName.setText(defaultValue);
                     devId = defaultValue.substring(0,5);
                     deviceName.setText(defaultValue.substring(7));
-                    prefs.edit().remove(dev_sh).commit();
+                    prefs.edit().remove(dev_sh).apply();
                 }
             }
         };
@@ -205,6 +206,10 @@ public class AddAlarm extends Fragment implements AddAlarmDevice.OnFragmentInter
                             String type = "addAlarm";
                             BackgroundTask backgroundTask = new BackgroundTask(getContext());
                             backgroundTask.execute(type, DateStart, Time, DeviceId, Create_by, Sequence, DateEnd);
+
+                            getActivity().getSupportFragmentManager().popBackStack();
+                            getActivity().finish();
+                            startActivity(getActivity().getIntent());
                         }else {
                             Toast.makeText(getContext(), "Uzupełnij wszystkie pola", Toast.LENGTH_LONG).show();
                         }
@@ -214,14 +219,19 @@ public class AddAlarm extends Fragment implements AddAlarmDevice.OnFragmentInter
                         String type = "addAlarms";
                         BackgroundTask backgroundTask = new BackgroundTask(getContext());
                         backgroundTask.execute(type, DateStart, Time, DeviceId, Create_by);
+
+                        getActivity().getSupportFragmentManager().popBackStack();
+                        getActivity().finish();
+                        startActivity(getActivity().getIntent());
+                        Log.e("Grupowo", DateStart + "/" + Time + "/" + DeviceId + "/" + Create_by);
                     }else {
                         Toast.makeText(getContext(), "Uzupełnij wszystkie pola", Toast.LENGTH_LONG).show();
                     }
 
                 }
 
-                getActivity().finish();
-                startActivity(getActivity().getIntent());
+                sharedpreferences.registerOnSharedPreferenceChangeListener(listener);
+
             }
         });
 
@@ -239,7 +249,12 @@ public class AddAlarm extends Fragment implements AddAlarmDevice.OnFragmentInter
             @Override
             public void onClick(View v) {
                 sendBack();
+
                 getActivity().getSupportFragmentManager().popBackStack();
+
+                getActivity(). finish();
+                startActivity(getActivity().getIntent());
+
             }
         });
 
@@ -315,6 +330,7 @@ public class AddAlarm extends Fragment implements AddAlarmDevice.OnFragmentInter
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+
     }
     @Override
     public void onDetach() {

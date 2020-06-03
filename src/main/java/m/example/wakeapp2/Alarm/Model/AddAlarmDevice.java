@@ -118,7 +118,6 @@ public class AddAlarmDevice extends Fragment {
                 SharedPreferences.Editor editor = sharedpreferences.edit();
                 editor.putString(dev_sh, devicess);
                 editor.apply();
-
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         });

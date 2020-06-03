@@ -77,7 +77,7 @@ public class AlarmActivity extends AppCompatActivity implements AddAlarm.OnFragm
                 AlarmList.add(p);
 
             }
-            ListMySqlAdapter adapter = new ListMySqlAdapter(AlarmList, AlarmActivity.this);
+            ListMySqlAdapter adapter = new ListMySqlAdapter(AlarmList, AlarmActivity.this, this);
             listview.setAdapter(adapter);
         } catch (ExecutionException e) {
             e.printStackTrace();

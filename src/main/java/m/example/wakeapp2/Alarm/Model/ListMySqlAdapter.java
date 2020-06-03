@@ -28,14 +28,16 @@ public class ListMySqlAdapter extends ArrayAdapter<ListMySQl> {
 
     private List<ListMySQl> SqlList;
     private Context mCtx;
+    private Activity Act;
     Button btn_editAlarm, btn_usunAlarm;
     public static final String Name = "nameKey";
     public static final String Role = "roleKey";
 
-    public ListMySqlAdapter(List<ListMySQl> P, Context C){
+    public ListMySqlAdapter(List<ListMySQl> P, Context C, Activity A){
         super (C, R.layout.listalarm, P);
         this.SqlList = P;
         this.mCtx = C;
+        this.Act = A;
     }
 
     @NonNull
@@ -128,6 +130,8 @@ public class ListMySqlAdapter extends ArrayAdapter<ListMySQl> {
                     intent.putExtra("DevId", listMySQl.getDeviceId());
                     intent.putExtra("aId", listMySQl.getAlarmId());
                     getContext().startActivity(intent);
+                    Act.finish();
+
                 }
             });
 
