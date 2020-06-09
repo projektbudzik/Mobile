@@ -19,13 +19,13 @@
             <TextView
                 android:id="@+id/tv_logo"
                 android:layout_centerInParent="true"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableTop="@drawable/ic_person_white_24dp"
                 android:text="Zarządzanie użytkownikami"
                 android:textAlignment="center"
                 android:textColor="@color/colorWhite"
-                android:textSize="20sp" />
+                android:textSize="20sp"/>
         </RelativeLayout>
 
             <ListView

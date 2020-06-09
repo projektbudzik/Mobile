@@ -61,6 +61,8 @@
             android:hint="Kliknij aby wybrac date"
             android:focusable="false"
             android:padding="10dp"
+            android:textAlignment="center"
+            android:gravity="center"
             android:background="@drawable/edittext_layout"
             android:id="@+id/textView3"
             android:textColor="@color/colorBlack"/>
@@ -99,6 +101,8 @@
                 android:layout_height="wrap_content"
                 android:focusable="false"
                 android:clickable="true"
+                android:gravity="center"
+                android:textAlignment="center"
                 android:hint="Wybierz urzadzenie"
                 android:textColor="@color/colorBlack"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -192,6 +196,8 @@
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/edittext_layout"
                 android:layout_height="38dp"
+                android:textAlignment="center"
+                android:gravity="center"
                 android:hint="Kliknij aby wybrac date"
                 android:textColor="@color/colorBlack"
                 android:textAppearance="?android:attr/textAppearanceMedium" />

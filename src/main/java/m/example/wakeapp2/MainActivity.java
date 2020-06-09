@@ -143,8 +143,14 @@ public class MainActivity extends AppCompatActivity {
             String alarmTime = jsoNreader.readJSONdata(callbackMsg1, "Time");
             Log.e("Pozycja", "ok");
             ServiceCaller(intent, alarmDate);
-            String currentAlarm = "Alarm: " + alarmDate + ", " + alarmTime;
-            tv_subtitle.setText(currentAlarm);
+            if (alarmTime.length() > 3 ) {
+                String currentAlarm = "Alarm: " + alarmDate + ", " + alarmTime;
+                tv_subtitle.setText(currentAlarm);
+            }else{
+                String currentAlarm = "Brak alarmów";
+                tv_subtitle.setText(currentAlarm);
+            }
+
         }else{
             tv_subtitle.setText("Nie podano numeru telefonu");
             setNumber.setVisibility(View.VISIBLE);

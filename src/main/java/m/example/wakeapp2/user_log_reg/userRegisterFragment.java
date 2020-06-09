@@ -151,14 +151,14 @@ public class userRegisterFragment extends Fragment {
         btnReg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String username = txtName.getText().toString();
                 String email = txtEmail.getText().toString();
                 String password = txtPassword.getText().toString();
+
                 String type = "userreg";
                 String callbackMsg = "";
                 BackgroundTask backgroundTask = new BackgroundTask(getActivity().getApplicationContext());
-
-
 
                 try {
                     callbackMsg = backgroundTask.execute(type, username, password, email).get();

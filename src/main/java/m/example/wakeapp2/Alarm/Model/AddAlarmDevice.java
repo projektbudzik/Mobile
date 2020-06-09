@@ -40,8 +40,8 @@ import m.example.wakeapp2.R;
  * Use the {@link AddAlarmDevice#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AddAlarmDevice extends Fragment {
 
+public class AddAlarmDevice extends Fragment {
 
     private String GroupId;
     private String Email;
@@ -84,40 +84,41 @@ public class AddAlarmDevice extends Fragment {
         Button btn_back = view.findViewById(R.id.btn_cofnij2);
         BackgroundTask backgroundTask = new BackgroundTask(getContext());
 
-        sharedpreferences = getActivity().getSharedPreferences("MyPref", 0);
+        sharedpreferences = getContext().getSharedPreferences("MyPref", 0);
 
         String type="getDevices";
-        if (sharedpreferences.contains(Name)) {
-            GroupId = sharedpreferences.getString(Group_sp, "");
-            Email = sharedpreferences.getString(Email_sp, "");
-            Role = sharedpreferences.getString(Role_sp, "");
-        }
-        try {
-            String s = backgroundTask.execute(type, Role, Email, GroupId).get();
-            JSONObject obj = new JSONObject(s.substring(s.indexOf("{"), s.lastIndexOf("}") + 1));
-            JSONArray array = obj.getJSONArray("devices");
-            Log.e("kkll", array.length()+"");
-            for (int i=0; i <array.length(); i++){
-                JSONObject device = array.getJSONObject(i);
-                userList.add(device.getString("DeviceId") + " - " + device.getString("Name"));
+            if (sharedpreferences.contains(Name)) {
+                GroupId = sharedpreferences.getString(Group_sp, "");
+                Email = sharedpreferences.getString(Email_sp, "");
+                Role = sharedpreferences.getString(Role_sp, "");
             }
-            ArrayAdapter arrayAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1,userList);
-            listUser.setAdapter(arrayAdapter);
+            try {
+                String s = backgroundTask.execute(type, Role, Email, GroupId).get();
+                JSONObject obj = new JSONObject(s.substring(s.indexOf("{"), s.lastIndexOf("}") + 1));
+                JSONArray array = obj.getJSONArray("devices");
+                for (int i=0; i <array.length(); i++){
+                    JSONObject device = array.getJSONObject(i);
+                    userList.add(device.getString("DeviceId") + " - " + device.getString("Name"));
+                }
+                ArrayAdapter arrayAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1,userList);
+                listUser.setAdapter(arrayAdapter);
 
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        } catch (JSONException ignored)  {
 
-        }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            } catch (JSONException ignored)  {
+
+            }
 
         listUser.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 String devicess =  userList.get(position);
-                sharedpreferences.edit().remove(dev_sh).apply();
                 SharedPreferences.Editor editor = sharedpreferences.edit();
                 editor.putString(dev_sh, devicess);
-                editor.apply();
+                editor.commit();
+
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         });

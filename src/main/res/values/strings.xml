@@ -48,7 +48,7 @@
     </string-array>
 
     <!-- TODO: USER REGISTRATION -->
-    <string name="user_lvl">Nazwa użytkownika</string>
+    <string name="user_lvl">Użytkownik</string>
     <string name="user_swipe_left_for_register">Przesuń w lewo, aby zarejestrować użtykownika</string>
     <string name="user_tag">Zaloguj się poniżej\nlub zarejestruj nowego użytkownika</string>
 

@@ -47,14 +47,13 @@ import m.example.wakeapp2.R;
 
 public class AddAlarm extends Fragment implements AddAlarmDevice.OnFragmentInteractionListener{
 
-
     private OnFragmentInteractionListener mListener;
     SharedPreferences.OnSharedPreferenceChangeListener listener;
     private SharedPreferences sharedpreferences;
     private Button btn_cofnij,btn_dodaj_alarm;
     private TimePicker timePicker;
     String devId;
-    private String selectedDate;
+    private String selectedDate, devtit;
     private EditText startAlarm, deviceName, endAlarm;
     public static final String dev_sh = "devKey";
     public static final String Name = "nameKey";
@@ -109,23 +108,22 @@ public class AddAlarm extends Fragment implements AddAlarmDevice.OnFragmentInter
         final FragmentManager fm = ((AppCompatActivity)getActivity()).getSupportFragmentManager();
 
 
-        sharedpreferences = getActivity().getApplicationContext().getSharedPreferences("MyPref", 0);
-        if (sharedpreferences.contains(dev_sh)){
-            sharedpreferences.edit().remove(dev_sh).apply();
-        }
+        sharedpreferences = getContext().getSharedPreferences("MyPref", 0);
 
-            listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-                public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-                if (prefs.contains(dev_sh)) {
-                    String defaultValue = prefs.getString(dev_sh, "");
-                    deviceName.setText(defaultValue);
+
+
+        sharedpreferences.registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
+            @Override
+            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+                if (sharedPreferences.contains(dev_sh)) {
+                    String defaultValue =  sharedpreferences.getString(dev_sh, "");
                     devId = defaultValue.substring(0,5);
-                    deviceName.setText(defaultValue.substring(7));
-                    prefs.edit().remove(dev_sh).apply();
+                    devtit = defaultValue.substring(8);
+                    deviceName.setText(devtit);
+
                 }
             }
-        };
-        sharedpreferences.registerOnSharedPreferenceChangeListener(listener);
+        });
 
         deviceName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -206,7 +204,6 @@ public class AddAlarm extends Fragment implements AddAlarmDevice.OnFragmentInter
                             String type = "addAlarm";
                             BackgroundTask backgroundTask = new BackgroundTask(getContext());
                             backgroundTask.execute(type, DateStart, Time, DeviceId, Create_by, Sequence, DateEnd);
-
                             getActivity().getSupportFragmentManager().popBackStack();
                             getActivity().finish();
                             startActivity(getActivity().getIntent());
@@ -219,19 +216,14 @@ public class AddAlarm extends Fragment implements AddAlarmDevice.OnFragmentInter
                         String type = "addAlarms";
                         BackgroundTask backgroundTask = new BackgroundTask(getContext());
                         backgroundTask.execute(type, DateStart, Time, DeviceId, Create_by);
-
                         getActivity().getSupportFragmentManager().popBackStack();
                         getActivity().finish();
                         startActivity(getActivity().getIntent());
-                        Log.e("Grupowo", DateStart + "/" + Time + "/" + DeviceId + "/" + Create_by);
                     }else {
                         Toast.makeText(getContext(), "Uzupełnij wszystkie pola", Toast.LENGTH_LONG).show();
                     }
-
                 }
-
                 sharedpreferences.registerOnSharedPreferenceChangeListener(listener);
-
             }
         });
 
@@ -248,10 +240,8 @@ public class AddAlarm extends Fragment implements AddAlarmDevice.OnFragmentInter
         btn_cofnij.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendBack();
 
                 getActivity().getSupportFragmentManager().popBackStack();
-
                 getActivity(). finish();
                 startActivity(getActivity().getIntent());
 

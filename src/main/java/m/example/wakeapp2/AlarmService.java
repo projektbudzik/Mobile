@@ -93,7 +93,6 @@ public class AlarmService extends Service {
                         calendar.get(Calendar.MINUTE) == alarmMinute ){
 
                     if (notiStatus==0) {
-
                         AudioManager manager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
                         manager.setStreamVolume(AudioManager.STREAM_MUSIC, 100, 0);
                         ringtone.play();
@@ -102,8 +101,9 @@ public class AlarmService extends Service {
                         handler.removeCallbacksAndMessages(null);
                     }
                 } else {
-                    ringtone.stop();
                     notiStatus = 0;
+                    ringtone.stop();
+
                 }
             }
         }, 0, 5000);
@@ -133,6 +133,7 @@ public class AlarmService extends Service {
                     .build();
 
             startForeground(111333, notification);
+            openAlarmOn();
         }
         catch (Exception e){
             e.printStackTrace();
@@ -148,5 +149,9 @@ public class AlarmService extends Service {
         }
         notiStatus = 0;
         super.onDestroy();
+    }
+    private void openAlarmOn() {
+        Intent intent = new Intent(this, AlarmON.class);
+        startActivity(intent);
     }
 }

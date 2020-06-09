@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import m.example.wakeapp2.info_log_reg.Login3Activity;
 import m.example.wakeapp2.user_log_reg.Login2Activity;
 
 public class Settings extends AppCompatActivity {
@@ -16,6 +17,8 @@ public class Settings extends AppCompatActivity {
     public static final String GroupName = "groupNameKey";
     public static final String Email = "emailKey";
     public static final String Role = "roleKey";
+    public static final String phoneNumber = "numberKey";
+
     Intent intent;
     SharedPreferences sharedPreferences;
     @Override
@@ -26,8 +29,10 @@ public class Settings extends AppCompatActivity {
         TextView tv_sets_email = findViewById(R.id.tv_sets_email);
         TextView tv_sets_phone = findViewById(R.id.tv_sets_phone);
         TextView tv_sets_group = findViewById(R.id.tv_sets_group);
+        TextView tv_sets_phoneN = findViewById(R.id.tv_sets_phoneN);
         Button btn_cofnij = findViewById(R.id.btn_back);
         Button btn_logout = findViewById(R.id.btn_logout);
+        Button btn_phoneCh = findViewById(R.id.btn_phoneCh);
         intent = new Intent(this, AlarmService.class);
 
         sharedPreferences = getSharedPreferences("MyPref", 0);
@@ -47,6 +52,20 @@ public class Settings extends AppCompatActivity {
             String tGroup = sharedPreferences.getString(GroupName,"");
             tv_sets_group.setText(tGroup);
         }
+        if (sharedPreferences.contains(phoneNumber)){
+            String tGroup = sharedPreferences.getString(phoneNumber,"");
+            tv_sets_phoneN.setText(tGroup);
+        }
+
+        btn_phoneCh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                Intent intent = new Intent(getApplicationContext(), Login3Activity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
 
         btn_cofnij.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -83,7 +83,7 @@
                 android:layout_marginRight="20dp"
                  android:layout_marginBottom="10dp"
                 android:background="@drawable/edittext_layout"
-                android:hint="@string/user_lvl"
+                android:hint="Nazwa użytkownika"
                 android:inputType="textPersonName"
                 android:padding="15dp"
                 android:textSize="15sp" />
